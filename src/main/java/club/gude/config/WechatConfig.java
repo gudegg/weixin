@@ -8,49 +8,49 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "wechat", locations = "classpath:wechat.properties")
 public class WechatConfig {
-    private String Token;
-    private String Appid;
-    private String AppSecret;
-    private String EncodingAESKey;
-    private boolean EncryptMessage;
+    public static String Token;
+    public static String Appid;
+    public static String AppSecret;
+    public static String EncodingAESKey;
+    public static boolean EncryptMessage;
 
-    public boolean getEncryptMessage() {
-        return EncryptMessage;
-    }
-
-    public void setEncryptMessage(boolean encryptMessage) {
-        EncryptMessage = encryptMessage;
-    }
-
-    public String getToken() {
+    public static String getToken() {
         return Token;
     }
 
-    public void setToken(String token) {
+    public static void setToken(String token) {
         Token = token;
     }
 
-    public String getAppid() {
-        return Appid;
+    public static boolean isEncryptMessage() {
+        return EncryptMessage;
     }
 
-    public void setAppid(String appid) {
-        this.Appid = appid;
+    public static void setEncryptMessage(boolean encryptMessage) {
+        EncryptMessage = encryptMessage;
     }
 
-    public String getAppSecret() {
-        return AppSecret;
-    }
-
-    public void setAppSecret(String appSecret) {
-        AppSecret = appSecret;
-    }
-
-    public String getEncodingAESKey() {
+    public static String getEncodingAESKey() {
         return EncodingAESKey;
     }
 
-    public void setEncodingAESKey(String encodingAESKey) {
+    public static void setEncodingAESKey(String encodingAESKey) {
         EncodingAESKey = encodingAESKey;
+    }
+
+    public static String getAppSecret() {
+        return AppSecret;
+    }
+
+    public static void setAppSecret(String appSecret) {
+        AppSecret = appSecret;
+    }
+
+    public static String getAppid() {
+        return Appid;
+    }
+
+    public static void setAppid(String appid) {
+        Appid = appid;
     }
 }

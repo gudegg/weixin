@@ -37,8 +37,6 @@ import static club.gude.utils.SignUtil.getSHA1;
 @RestController
 public class AccessController {
     private Logger logger = LoggerFactory.getLogger(AccessController.class);
-    @Resource
-    WechatConfig wechatConfig;
 
     public WXBizMsgCrypt wxBizMsgCrypt;
 
@@ -54,8 +52,8 @@ public class AccessController {
      */
     @RequestMapping(value = "/access", method = RequestMethod.GET)
     public String accessWechat(String signature, String timestamp, String nonce, String echostr) {
-        logger.info(wechatConfig.getToken());
-        String sha1_signature = SignUtil.getSHA1(wechatConfig.getToken(), timestamp, nonce);
+        logger.info(WechatConfig.Token);
+        String sha1_signature = SignUtil.getSHA1(WechatConfig.Token, timestamp, nonce);
         logger.info(sha1_signature + "  " + signature);
         if (sha1_signature.equals(signature)) {
             return echostr;
@@ -71,16 +69,16 @@ public class AccessController {
      */
     @RequestMapping(value = "/access", method = RequestMethod.POST)
     public Object sendMsg(HttpServletRequest request, String signature, String timestamp, String nonce) {
-        String sha1_signature = SignUtil.getSHA1(wechatConfig.getToken(), timestamp, nonce);
+        String sha1_signature = SignUtil.getSHA1(WechatConfig.Token, timestamp, nonce);
         if (sha1_signature.equals(signature)) {
             try {
                 InputStream is = request.getInputStream();
                 String receive_msg = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
                 Map<String, String> receive_map = null;
                 //判断使用明文模式 还是加密模式
-                if (wechatConfig.getEncryptMessage()) {
+                if (WechatConfig.EncryptMessage) {
                     if (wxBizMsgCrypt == null) {
-                        wxBizMsgCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+                        wxBizMsgCrypt = new WXBizMsgCrypt(WechatConfig.Token, WechatConfig.EncodingAESKey, WechatConfig.Appid);
                     }
                     String encrypt_type = request.getParameter("encrypt_type");
                     String msg_signature = request.getParameter("msg_signature");

@@ -1,53 +1,51 @@
 package club.gude.api.token;
 
+import club.gude.entity.token.Token;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author Gude
  * @Date 2016/4/6.
  */
 public class TokenApi {
-    //
     private long expired_time = 7000;
+    private Token token=null;
 
-    private  String token;
+    private static TokenApi tokenApi = new TokenApi();
 
-    TokenApi() {
-
-    }
-    private TokenApi(Builder builder) {
-        this.expired_time = builder.expired_time;
+    public static TokenApi getInstance() {
+        return tokenApi;
     }
 
-    /**
-     * 刷新token
-     */
-    private  void freshAccessToken(){
-
-
+    private TokenApi() {
 
     }
 
-    public String getToken() {
+    public Token getToken() throws IOException {
+        if (token == null) {
+            setToken(TokenTask.freshToken());
+            TokenTask.createTask(expired_time);
 
+        }
         return token;
     }
 
-    public static class Builder {
-        private long expired_time= 7000 ;
-
-        /**
-         *
-         * @param expired_time 自定义token过期时间 默认为7000s  单位:s  即定时器刷新时间
-         * @return
-         */
-        public Builder expiredTime(long expired_time) {
-            this.expired_time = expired_time;
-            return this;
-        }
-
-        public TokenApi build() {
-            return new TokenApi(this);
-        }
-
+    public synchronized void setToken(Token token) {
+        this.token = token;
     }
 
+    /**
+     *  会重新创建定时器
+     *
+     * @param expired_time 自定义定时器间隔时间
+     */
+    public void setExpired_time(long expired_time) {
+        this.expired_time = expired_time;
+        if (token != null) {
+            TokenTask.createTask(expired_time);
+        }
+    }
 }
