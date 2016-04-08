@@ -1,4 +1,4 @@
-package club.gude.entity.msg;
+package club.gude.entity.msg.in;
 
 /**
  * @Author Gude
@@ -9,7 +9,7 @@ package club.gude.entity.msg;
  * HQMusicUrl	否	高质量音乐链接，WIFI环境优先使用该链接播放音乐
  * ThumbMediaId	否	缩略图的媒体id，通过素材管理接口上传多媒体文件，得到的id
  */
-public class MusicMsg extends BaseMsg {
+public class InMusicMsg extends InBaseMsg {
 
     private String Title;
 
@@ -18,6 +18,7 @@ public class MusicMsg extends BaseMsg {
 
     private String HQMusicUrl;
     private String ThumbMediaId;
+
 
     public String getTitle() {
         return Title;

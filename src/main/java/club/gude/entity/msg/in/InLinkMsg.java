@@ -1,16 +1,17 @@
-package club.gude.entity.msg;
+package club.gude.entity.msg.in;
 
 /**
  * @Author Gude
  * @Date 2016/4/5.
  */
-public class LinkMsg extends BaseMsg {
+public class InLinkMsg extends InBaseMsg {
     //消息标题
     private String Title;
     //消息描述
     private String Description;
     //消息链接
     private String Url;
+
 
     public String getTitle() {
         return Title;

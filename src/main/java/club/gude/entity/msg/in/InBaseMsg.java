@@ -1,4 +1,4 @@
-package club.gude.entity.msg;
+package club.gude.entity.msg.in;
 
 import java.io.Serializable;
 
@@ -6,19 +6,26 @@ import java.io.Serializable;
  * @Author Gude
  * @Date 2016/4/5.
  */
-public class BaseMsg implements Serializable{
+public class InBaseMsg implements Serializable {
 
     private static final long serialVersionUID = 530650570515468050L;
-    //开发者微信(接收)  发送方账号(回复)
+    //开发者微信(接收)
     private String ToUserName;
-    //发送方帐号（一个OpenID）(接收)  开发者(回复)
+    //发送方帐号（一个OpenID）
     private String FromUserName;
     //消息创建时间
-    private  long CreateTime;
+    private Integer CreateTime;
     //消息类型 text voice image vedio shortvideo location link
     private String MsgType;
-    //消息id，64位整型
-    private String MsgId;
+    private Long MsgId;
+
+    public Long getMsgId() {
+        return MsgId;
+    }
+
+    public void setMsgId(Long msgId) {
+        MsgId = msgId;
+    }
 
     public String getToUserName() {
         return ToUserName;
@@ -36,11 +43,11 @@ public class BaseMsg implements Serializable{
         FromUserName = fromUserName;
     }
 
-    public long getCreateTime() {
+    public Integer getCreateTime() {
         return CreateTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Integer createTime) {
         CreateTime = createTime;
     }
 
@@ -52,11 +59,5 @@ public class BaseMsg implements Serializable{
         MsgType = msgType;
     }
 
-    public String getMsgId() {
-        return MsgId;
-    }
 
-    public void setMsgId(String msgId) {
-        MsgId = msgId;
-    }
 }

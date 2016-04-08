@@ -1,33 +1,27 @@
 package club.gude.controller;
 
 import club.gude.config.WechatConfig;
+import club.gude.entity.msg.in.*;
 import club.gude.utils.SignUtil;
 import club.gude.utils.XmlUtil;
 import com.google.common.base.Charsets;
-import com.google.common.io.ByteSource;
-import com.google.common.io.CharSource;
 import com.google.common.io.CharStreams;
-import com.google.common.io.Resources;
-import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 
-import static club.gude.utils.SignUtil.getSHA1;
+import static club.gude.utils.XmlUtil.xmlResolve_MsgIn;
+
 
 /**
  * @Author Gude
@@ -38,7 +32,7 @@ import static club.gude.utils.SignUtil.getSHA1;
 public class AccessController {
     private Logger logger = LoggerFactory.getLogger(AccessController.class);
 
-    public WXBizMsgCrypt wxBizMsgCrypt;
+    private WXBizMsgCrypt wxBizMsgCrypt;
 
 
     /**
@@ -74,6 +68,7 @@ public class AccessController {
             try {
                 InputStream is = request.getInputStream();
                 String receive_msg = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
+
                 Map<String, String> receive_map = null;
                 //判断使用明文模式 还是加密模式
                 if (WechatConfig.EncryptMessage) {
@@ -84,16 +79,48 @@ public class AccessController {
                     String msg_signature = request.getParameter("msg_signature");
                     //加密消息解密
                     String decrypt_Msg = wxBizMsgCrypt.decryptMsg(msg_signature, timestamp, nonce, receive_msg);
-                    receive_map=XmlUtil.xmlResolve(decrypt_Msg);
+                    receive_map = XmlUtil.xmlResolve(decrypt_Msg);
+                    if (XmlUtil.inMsgType(decrypt_Msg).equals("shortvideo") || XmlUtil.inMsgType(decrypt_Msg).equals("vedio")) {
+                        InVedioMsg inLocationMsg = (InVedioMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inLocationMsg.toString() + "视频");
+                    } else if (XmlUtil.inMsgType(decrypt_Msg).equals("image")) {
+                        InImageMsg inLocationMsg = (InImageMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inLocationMsg.toString() + "图片");
+                    } else if (XmlUtil.inMsgType(decrypt_Msg).equals("voice")) {
+                        InVoiceMsg inLocationMsg = (InVoiceMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inLocationMsg.toString() + "语音");
+                    } else if (XmlUtil.inMsgType(decrypt_Msg).equals("text")) {
+                        InTextMsg inLocationMsg = (InTextMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inLocationMsg.toString() + "文本");
+                    } else if (XmlUtil.inMsgType(decrypt_Msg).equals("location")) {
+                        InLocationMsg inLocationMsg = (InLocationMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inLocationMsg.toString() + "位置");
+                    } else if (XmlUtil.inMsgType(decrypt_Msg).equals("link")) {
+                        InLinkMsg inLocationMsg = (InLinkMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inLocationMsg.toString() + "链接");
+                    }
 
 
+                    logger.info("\n" + receive_msg + "\n" + receive_map + "\n" + signature + "---" + timestamp + "---" + nonce);
+
+                    String MsgTyp = receive_map.get("MsgType");
+                    Map map = new HashMap();
+                    map.put("ToUserName", receive_map.get("FromUserName"));
+                    map.put("FromUserName", receive_map.get("ToUserName"));
+                    map.put("CreateTime", System.currentTimeMillis() + "");
+                    map.put("MsgType", "text");
+                    map.put("Content", "欢迎你");
+
+                    String replyMsg = XmlUtil.xmlCreate(map);
+                    logger.info("回复消息:" + replyMsg);
+                    replyMsg = wxBizMsgCrypt.encryptMsg(replyMsg, timestamp, nonce);
+                    logger.info("加密后回复消息:" + replyMsg);
+                    return replyMsg;
                 } else {
                     //明文无需解密
                     receive_map = XmlUtil.xmlResolve(receive_msg);
                 }
 
-
-                logger.info("\n" + receive_msg + "\n" + receive_map + "\n" + signature + "---" + timestamp + "---" + nonce);
 
             } catch (Exception e) {
                 e.printStackTrace();

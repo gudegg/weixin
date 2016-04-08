@@ -1,4 +1,4 @@
-package club.gude.entity.msg;
+package club.gude.entity.msg.in;
 
 /**
  * @Author Gude
@@ -12,13 +12,18 @@ package club.gude.entity.msg;
  * PicUrl	否	图片链接，支持JPG、PNG格式，较好的效果为大图360*200，小图200*200
  * Url	否	点击图文消息跳转链接
  */
-public class NewsMsg extends BaseMsg {
+public class InNewsMsg extends InBaseMsg {
     private String ArticleCount;
     private String Articles;
     private String Title;
     private String Description;
     private String PicUrl;
     private String Url;
+
+
+
+
+
 
     public String getArticleCount() {
         return ArticleCount;

@@ -1,40 +1,40 @@
-package club.gude.entity.msg;
+package club.gude.entity.msg.in;
 
 /**
  * @Author Gude
  * @Date 2016/4/5.
  */
-public class LocationMsg extends BaseMsg{
+public class InLocationMsg extends InBaseMsg {
     //地理位置维度
-    private double Location_X;
+    private Double Location_X;
     //经度
-    private double Location_Y;
+    private Double Location_Y;
     //地图缩放大小
-    private int Scale;
+    private Integer Scale;
     //地理位置信息
     private String Label;
 
-    public double getLocation_X() {
+    public Double getLocation_X() {
         return Location_X;
     }
 
-    public void setLocation_X(double location_X) {
+    public void setLocation_X(Double location_X) {
         Location_X = location_X;
     }
 
-    public double getLocation_Y() {
+    public Double getLocation_Y() {
         return Location_Y;
     }
 
-    public void setLocation_Y(double location_Y) {
+    public void setLocation_Y(Double location_Y) {
         Location_Y = location_Y;
     }
 
-    public int getScale() {
+    public Integer getScale() {
         return Scale;
     }
 
-    public void setScale(int scale) {
+    public void setScale(Integer scale) {
         Scale = scale;
     }
 
