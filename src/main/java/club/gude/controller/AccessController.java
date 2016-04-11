@@ -1,5 +1,6 @@
 package club.gude.controller;
 
+import club.gude.api.token.TokenApi;
 import club.gude.config.WechatConfig;
 import club.gude.entity.msg.in.*;
 import club.gude.utils.SignUtil;
@@ -68,7 +69,6 @@ public class AccessController {
             try {
                 InputStream is = request.getInputStream();
                 String receive_msg = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
-
                 Map<String, String> receive_map = null;
                 //判断使用明文模式 还是加密模式
                 if (WechatConfig.EncryptMessage) {

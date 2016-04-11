@@ -5,7 +5,7 @@ package club.gude.entity.msg.in;
  * @Date 2016/4/5.
  */
 public class InVoiceMsg extends InBaseMsg {
-    //	语音消息媒体id，可以调用多媒体文件下载接口拉取数据。
+    //语音消息媒体id，可以调用多媒体文件下载接口拉取数据。
     private String MediaId;
     //语音格式，如amr，speex等
     private String Format;
