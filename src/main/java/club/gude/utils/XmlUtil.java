@@ -78,7 +78,7 @@ public class XmlUtil {
      * @param strXml
      * @return 传入消息对象 用户自己进行强制转换
      */
-    public static Object xmlResolve_MsgIn(String strXml) {
+    public static InBaseMsg xmlResolve_MsgIn(String strXml) {
         if (Strings.isNullOrEmpty(strXml)) {
             return null;
         } else {

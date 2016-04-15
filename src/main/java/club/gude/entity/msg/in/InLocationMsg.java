@@ -1,17 +1,25 @@
 package club.gude.entity.msg.in;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @Author Gude
  * @Date 2016/4/5.
  */
+@XmlRootElement(name = "xml")
 public class InLocationMsg extends InBaseMsg {
     //地理位置维度
+    @XmlElement
     private Double Location_X;
     //经度
+    @XmlElement
     private Double Location_Y;
     //地图缩放大小
+    @XmlElement
     private Integer Scale;
     //地理位置信息
+    @XmlElement
     private String Label;
 
     public Double getLocation_X() {

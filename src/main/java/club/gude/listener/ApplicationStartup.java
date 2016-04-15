@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 
 
 /**
@@ -35,6 +36,12 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 //                }
 //            },0,1, TimeUnit.SECONDS);
 //            tokenApi.setExpired_time(5);
+        TokenApi tokenApi=TokenApi.getInstance();
+        try {
+            logger.info(tokenApi.getToken().getAccess_token());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

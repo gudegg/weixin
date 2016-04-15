@@ -41,7 +41,23 @@ public class OkHttpUtil {
         }
         return null;
     }
-
+    /**
+     * 同步get
+     */
+    public static Response syncGetResResponse(String url) {
+        Request request = new Request.Builder().url(url).build();
+        Response response = null;
+        try {
+            response = OK_HTTP_CLIENT.newCall(request).execute();
+            if (response.isSuccessful()) {
+                return response;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
     public static ResponseBody syncGet(String url, Map<String, String> param) {
         for (String s : param.keySet()) {
             url += "?" + s + "=" + param.get(s);
@@ -180,6 +196,7 @@ public class OkHttpUtil {
      * RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
      * .build();
      * <p>
+     * 自定义请求
      *
      * @param url         链接
      * @param requestBody 请求体

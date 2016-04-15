@@ -1,5 +1,8 @@
 package club.gude.entity.msg.in;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @Author Gude
  * @Date 2016/4/5.
@@ -9,14 +12,17 @@ package club.gude.entity.msg.in;
  * HQMusicUrl	否	高质量音乐链接，WIFI环境优先使用该链接播放音乐
  * ThumbMediaId	否	缩略图的媒体id，通过素材管理接口上传多媒体文件，得到的id
  */
+@XmlRootElement(name = "xml")
 public class InMusicMsg extends InBaseMsg {
-
+    @XmlElement
     private String Title;
-
+    @XmlElement
     private String Description;
+    @XmlElement
     private String MusicURL;
-
+    @XmlElement
     private String HQMusicUrl;
+    @XmlElement
     private String ThumbMediaId;
 
 

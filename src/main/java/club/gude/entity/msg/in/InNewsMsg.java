@@ -1,5 +1,8 @@
 package club.gude.entity.msg.in;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @Author Gude
  * @Date 2016/4/5.
@@ -12,12 +15,19 @@ package club.gude.entity.msg.in;
  * PicUrl	否	图片链接，支持JPG、PNG格式，较好的效果为大图360*200，小图200*200
  * Url	否	点击图文消息跳转链接
  */
+@XmlRootElement(name = "xml")
 public class InNewsMsg extends InBaseMsg {
+    @XmlElement
     private String ArticleCount;
+    @XmlElement
     private String Articles;
+    @XmlElement
     private String Title;
+    @XmlElement
     private String Description;
+    @XmlElement
     private String PicUrl;
+    @XmlElement
     private String Url;
 
 

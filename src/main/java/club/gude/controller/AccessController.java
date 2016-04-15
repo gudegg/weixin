@@ -1,9 +1,10 @@
 package club.gude.controller;
 
-import club.gude.api.token.TokenApi;
 import club.gude.config.WechatConfig;
 import club.gude.entity.msg.in.*;
+import club.gude.entity.msg.out.OutTextMsg;
 import club.gude.utils.SignUtil;
+import club.gude.utils.XmlJaxbUtil;
 import club.gude.utils.XmlUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
@@ -20,8 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-
-import static club.gude.utils.XmlUtil.xmlResolve_MsgIn;
 
 
 /**
@@ -80,23 +79,40 @@ public class AccessController {
                     //加密消息解密
                     String decrypt_Msg = wxBizMsgCrypt.decryptMsg(msg_signature, timestamp, nonce, receive_msg);
                     receive_map = XmlUtil.xmlResolve(decrypt_Msg);
+
+
                     if (XmlUtil.inMsgType(decrypt_Msg).equals("shortvideo") || XmlUtil.inMsgType(decrypt_Msg).equals("vedio")) {
-                        InVedioMsg inLocationMsg = (InVedioMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        // InVedioMsg inLocationMsg = (InVedioMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        InVedioMsg inLocationMsg = (InVedioMsg) XmlJaxbUtil.xmlResolve_MsgIn(decrypt_Msg);
                         logger.info("对象:" + inLocationMsg.toString() + "视频");
                     } else if (XmlUtil.inMsgType(decrypt_Msg).equals("image")) {
-                        InImageMsg inLocationMsg = (InImageMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        //InImageMsg inLocationMsg = (InImageMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        InImageMsg inLocationMsg = (InImageMsg) XmlJaxbUtil.xmlResolve_MsgIn(decrypt_Msg);
                         logger.info("对象:" + inLocationMsg.toString() + "图片");
                     } else if (XmlUtil.inMsgType(decrypt_Msg).equals("voice")) {
-                        InVoiceMsg inLocationMsg = (InVoiceMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
-                        logger.info("对象:" + inLocationMsg.toString() + "语音");
+                        //InVoiceMsg inLocationMsg = (InVoiceMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        InVoiceMsg inVoiceMsg = (InVoiceMsg) XmlJaxbUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inVoiceMsg.toString() + "语音" + " " + inVoiceMsg.getRecognition());
                     } else if (XmlUtil.inMsgType(decrypt_Msg).equals("text")) {
-                        InTextMsg inLocationMsg = (InTextMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
-                        logger.info("对象:" + inLocationMsg.toString() + "文本");
+                        //InTextMsg inLocationMsg = (InTextMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        InTextMsg inTexitMsg = (InTextMsg) XmlJaxbUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inTexitMsg.toString() + "  " + inTexitMsg.getContent() + "文本");
+                        OutTextMsg outTextMsg = new OutTextMsg();
+                        outTextMsg.setContent("你发送的是文本");
+                        outTextMsg.setFromUserName(inTexitMsg.getToUserName());
+                        outTextMsg.setToUserName(inTexitMsg.getFromUserName());
+
+
+                        String replyMsg = XmlJaxbUtil.xmlCreate_MsgOut(outTextMsg);
+                        return replyMsg;
+
                     } else if (XmlUtil.inMsgType(decrypt_Msg).equals("location")) {
-                        InLocationMsg inLocationMsg = (InLocationMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
-                        logger.info("对象:" + inLocationMsg.toString() + "位置");
+                        // InLocationMsg inLocationMsg = (InLocationMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        InLocationMsg inLocationMsg = (InLocationMsg) XmlJaxbUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        logger.info("对象:" + inLocationMsg.toString() + "位置" + inLocationMsg.getLocation_X() + "  " + inLocationMsg.getLocation_Y());
                     } else if (XmlUtil.inMsgType(decrypt_Msg).equals("link")) {
-                        InLinkMsg inLocationMsg = (InLinkMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        //InLinkMsg inLocationMsg = (InLinkMsg) XmlUtil.xmlResolve_MsgIn(decrypt_Msg);
+                        InLinkMsg inLocationMsg = (InLinkMsg) XmlJaxbUtil.xmlResolve_MsgIn(decrypt_Msg);
                         logger.info("对象:" + inLocationMsg.toString() + "链接");
                     }
 
@@ -110,8 +126,9 @@ public class AccessController {
                     map.put("CreateTime", System.currentTimeMillis() + "");
                     map.put("MsgType", "text");
                     map.put("Content", "欢迎你");
-
                     String replyMsg = XmlUtil.xmlCreate(map);
+
+
                     logger.info("回复消息:" + replyMsg);
                     replyMsg = wxBizMsgCrypt.encryptMsg(replyMsg, timestamp, nonce);
                     logger.info("加密后回复消息:" + replyMsg);

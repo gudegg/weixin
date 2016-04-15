@@ -6,13 +6,10 @@ import club.gude.utils.http.OkHttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.squareup.okhttp.ResponseBody;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -23,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2016/4/6.
  */
 public class TokenTask {
+    private static Logger logger= LoggerFactory.getLogger(TokenTask.class);
     private static final ScheduledExecutorService service = Executors.newScheduledThreadPool(2);
     private static ScheduledFuture<?> scheduledFuture;
     private final static String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + WechatConfig.Appid + "&secret=" + WechatConfig.AppSecret;
@@ -52,6 +50,7 @@ public class TokenTask {
         ResponseBody responseBody = OkHttpUtil.syncGet(url);
         JSONObject jsonObject = JSON.parseObject(responseBody.string());
         Token token = new Token(jsonObject.getString("access_token"), jsonObject.getLong("expires_in"));
+        logger.info("access_token:"+token.getAccess_token());
         return token;
     }
 }
