@@ -3,7 +3,7 @@ package club.gude.utils.xml;
 import club.gude.entity.msg.in.*;
 import club.gude.entity.msg.out.OutBaseMsg;
 import com.google.common.base.Strings;
-import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
+import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
