@@ -32,30 +32,30 @@ public class XmlJaxbUtil {
         } else {
             String msgType = XmlUtil.inMsgType(strXml);
             if (msgType.equalsIgnoreCase("text")) {
-                InTextMsg inTextMsg = (InTextMsg) jaxbStrToXml(InTextMsg.class, strXml);
+                InTextMsg inTextMsg = (InTextMsg) StrToObj(InTextMsg.class, strXml);
                 return inTextMsg;
             } else if (msgType.equalsIgnoreCase("image")) {
-                InImageMsg inImageMsg = (InImageMsg) jaxbStrToXml(InImageMsg.class, strXml);
+                InImageMsg inImageMsg = (InImageMsg) StrToObj(InImageMsg.class, strXml);
 
                 return inImageMsg;
 
             } else if (msgType.equalsIgnoreCase("voice")) {
-                InVoiceMsg inVoiceMsg = (InVoiceMsg) jaxbStrToXml(InVoiceMsg.class, strXml);
+                InVoiceMsg inVoiceMsg = (InVoiceMsg) StrToObj(InVoiceMsg.class, strXml);
 
                 return inVoiceMsg;
 
             } else if (msgType.equalsIgnoreCase("video") || msgType.equalsIgnoreCase("shortvideo")) {
-                InVedioMsg inVedioMsg = (InVedioMsg) jaxbStrToXml(InVedioMsg.class, strXml);
+                InVedioMsg inVedioMsg = (InVedioMsg) StrToObj(InVedioMsg.class, strXml);
 
                 return inVedioMsg;
 
             } else if (msgType.equalsIgnoreCase("location")) {
-                InLocationMsg inLocationMsg = (InLocationMsg) jaxbStrToXml(InLocationMsg.class, strXml);
+                InLocationMsg inLocationMsg = (InLocationMsg) StrToObj(InLocationMsg.class, strXml);
 
                 return inLocationMsg;
 
             } else if (msgType.equalsIgnoreCase("link")) {
-                InLinkMsg inLinkMsg = (InLinkMsg) jaxbStrToXml(InLinkMsg.class, strXml);
+                InLinkMsg inLinkMsg = (InLinkMsg) StrToObj(InLinkMsg.class, strXml);
 
                 return inLinkMsg;
             }
@@ -63,14 +63,14 @@ public class XmlJaxbUtil {
         }
     }
 
-    public static Object jaxbStrToXml(Class clz, String strXml) throws JAXBException {
+    public static Object StrToObj(Class clz, String strXml) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(clz);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         return jaxbUnmarshaller.unmarshal(new StringReader(strXml));
     }
 
     /**
-     * 对象转化为XML
+     * 发送消息 对象转化为XML
      *
      * @param outBaseMsg
      * @return
@@ -83,7 +83,7 @@ public class XmlJaxbUtil {
         //是否输出头 True不输出 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
         //格式化
-        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         jaxbMarshaller.setProperty(CharacterEscapeHandler.class.getName(), new CharacterEscapeHandler() {
             @Override
             public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
@@ -94,4 +94,30 @@ public class XmlJaxbUtil {
         jaxbMarshaller.marshal(outBaseMsg, writer);
         return writer.toString();
     }
+
+    /**
+     * 通用对象转化为XML
+     *
+     * @param obj
+     * @return
+     * @throws JAXBException
+     */
+    public static String ObjToXml(Object obj) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+        jaxbMarshaller.setProperty(CharacterEscapeHandler.class.getName(), new CharacterEscapeHandler() {
+            @Override
+            public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
+                writer.write(ac, i, j);
+            }
+        });
+        StringWriter writer = new StringWriter();
+        jaxbMarshaller.marshal(obj, writer);
+        return writer.toString();
+    }
+
+
+
 }
