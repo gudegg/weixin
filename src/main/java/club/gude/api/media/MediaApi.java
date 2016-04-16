@@ -51,7 +51,7 @@ public class MediaApi {
      * 获取临时素材
      *
      * @param access_token
-     * @param media_id
+     * @param media_id     素材id
      * @return
      * @throws IOException
      */
@@ -61,6 +61,14 @@ public class MediaApi {
         return responseBody.byteStream();
     }
 
+    /**
+     * 获取临时素材
+     *
+     * @param access_token
+     * @param media_id     素材id
+     * @return
+     * @throws IOException
+     */
     public static Response getTemporaryMediaResResponse(String access_token, String media_id) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" + access_token + "&media_id=" + media_id;
         Response response = OkHttpUtil.syncGetResResponse(url);
@@ -68,9 +76,10 @@ public class MediaApi {
     }
 
     /**
-     * TODO 新增永久图文素材
+     * 新增永久图文素材
      *
      * @param access_token
+     * @param articles
      * @return
      */
 
@@ -84,10 +93,10 @@ public class MediaApi {
     }
 
     /**
-     * 图文素材中的图片 不占用公众号的素材库中图片数量的5000个的限制。图片仅支持jpg/png格式，大小必须在1MB以下。
+     * 添加图文素材中的图片 ps:不占用公众号的素材库中图片数量的5000个的限制。图片仅支持jpg/png格式，大小必须在1MB以下。
      *
      * @param access_token
-     * @param file
+     * @param file         图片文件
      * @return
      */
     public static String addForeverNew_Img(String access_token, File file) throws IOException {
@@ -104,7 +113,7 @@ public class MediaApi {
      * @param access_token
      * @param title        视频素材的标题
      * @param introduction 视频素材的描述
-     * @param file
+     * @param file         视频文件
      * @return
      * @throws IOException
      */
@@ -121,14 +130,15 @@ public class MediaApi {
     /**
      * 新增其他永久素材
      *
-     * @param type 媒体文件类型，分别有图片（image）、语音（voice）、和缩略图（thumb）
+     * @param access_token
+     * @param type         媒体文件类型，分别有图片（image）、语音（voice）、和缩略图（thumb）
+     * @param file         多媒体文件
      * @return
      */
     public static String addForeverOther(String access_token, String type, File file) throws IOException {
         if (type.equals("video")) {
-            throw new RuntimeException("请调用视频方法");
+            throw new RuntimeException("请调用视频方法addForeverVideo()");
         }
-
         String url = "https://api.weixin.qq.com/cgi-bin/material/add_material";
         RequestBody filebody = RequestBody.create(null, file);
         RequestBody requestBody = new MultipartBuilder().type(MultipartBuilder.FORM).addFormDataPart("media", file.getName(), filebody).addFormDataPart("type", type).addFormDataPart("access_token", access_token).build();
@@ -140,7 +150,7 @@ public class MediaApi {
      * 获取永久素材
      *
      * @param access_token
-     * @param media_id
+     * @param media_id     素材id
      * @return
      * @throws IOException
      */
