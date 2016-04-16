@@ -17,14 +17,14 @@ public class Article {
     private String thumb_media_id;
     private String author;
     private String digest;
-    private String show_cover_pic;
+    private int show_cover_pic;
     private String content;
     private String content_source_url;
 
     public Article() {
     }
 
-    public Article(String title, String thumb_media_id, String author, String digest, String show_cover_pic, String content, String content_source_url) {
+    public Article(String title, String thumb_media_id, String author, String digest, int show_cover_pic, String content, String content_source_url) {
         this.title = title;
         this.thumb_media_id = thumb_media_id;
         this.author = author;
@@ -66,11 +66,11 @@ public class Article {
         this.digest = digest;
     }
 
-    public String getShow_cover_pic() {
+    public int getShow_cover_pic() {
         return show_cover_pic;
     }
 
-    public void setShow_cover_pic(String show_cover_pic) {
+    public void setShow_cover_pic(int show_cover_pic) {
         this.show_cover_pic = show_cover_pic;
     }
 

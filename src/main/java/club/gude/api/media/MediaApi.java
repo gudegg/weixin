@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static club.gude.utils.http.OkHttpUtil.MEDIA_TYPE_JSON;
 import static club.gude.utils.http.OkHttpUtil.syncPostByJson;
 import static org.apache.coyote.http11.Constants.a;
 
@@ -74,13 +75,11 @@ public class MediaApi {
      */
 
     public static String addForeverNews(String access_token, List<Article> articles) throws IOException {
-        String url = "https://api.weixin.qq.com/cgi-bin/material/add_news";
+        String url = "https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=" + access_token;
         Map<String, List<Article>> map = new HashMap();
         map.put("articles", articles);
         String json = JSON.toJSONString(map);
-        RequestBody r = RequestBody.create(null, json);
-        RequestBody requestBody = new MultipartBuilder().type(MultipartBuilder.FORM).addPart(r).addFormDataPart("access_token", access_token).build();
-        ResponseBody responseBody = OkHttpUtil.syncPost(url, requestBody);
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
         return responseBody.string();
     }
 
@@ -111,7 +110,7 @@ public class MediaApi {
      */
     public static String addForeverVideo(String access_token, String title, String introduction, File file) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/material/add_material";
-        String description = "{\"title\":" + title + ",\"introduction\":" + introduction + "}";
+        String description = "{\"title\":\"" + title + "\",\"introduction\":\"" + introduction + "\"}";
         //System.out.println(description);
         RequestBody filebody = RequestBody.create(null, file);
         RequestBody requestBody = new MultipartBuilder().type(MultipartBuilder.FORM).addFormDataPart("media", file.getName(), filebody).addFormDataPart("description", description).addFormDataPart("type", "video").addFormDataPart("access_token", access_token).build();
