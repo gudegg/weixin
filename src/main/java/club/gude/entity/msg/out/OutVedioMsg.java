@@ -1,40 +1,33 @@
 package club.gude.entity.msg.out;
 
+
+import club.gude.utils.xml.AdapterStringCDATA;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 /**
  * @Author Gude
  * @Date 2016/4/8.
  */
+@XmlRootElement(name = "xml")
 public class OutVedioMsg extends OutBaseMsg {
+    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
     private String MsgType = "vedio";
-    private String MediaId;
-    private String Title;
-    private String Description;
+    @XmlElement(name = "Video")
+    private VideoItem videoItem;
 
     public String getMsgType() {
         return MsgType;
     }
 
-    public String getMediaId() {
-        return MediaId;
+
+    public VideoItem getVideoItem() {
+        return videoItem;
     }
 
-    public void setMediaId(String mediaId) {
-        MediaId = mediaId;
-    }
-
-    public String getTitle() {
-        return Title;
-    }
-
-    public void setTitle(String title) {
-        Title = title;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
+    public void setVideoItem(VideoItem videoItem) {
+        this.videoItem = videoItem;
     }
 }

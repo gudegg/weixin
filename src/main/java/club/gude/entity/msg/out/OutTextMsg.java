@@ -1,6 +1,9 @@
 package club.gude.entity.msg.out;
+import club.gude.utils.xml.AdapterStringCDATA;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * @Author Gude
@@ -8,9 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "xml")
 public class OutTextMsg extends OutBaseMsg {
-    @XmlElement
+    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
     private String MsgType = "text";
-    @XmlElement
+    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
     private String Content;
 
     public String getMsgType() {

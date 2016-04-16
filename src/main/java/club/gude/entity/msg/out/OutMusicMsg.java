@@ -1,57 +1,30 @@
 package club.gude.entity.msg.out;
 
+import club.gude.utils.xml.AdapterStringCDATA;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 /**
  * @Author Gude
  * @Date 2016/4/8.
  */
-public class OutMusicMsg extends OutBaseMsg{
-    private String MsgType="music";
-    private String Title;
-    private String Description;
-    private String MusicURL;
-    private String HQMusicUrl;
-    private String ThumbMediaId;
+@XmlRootElement(name = "xml")
+public class OutMusicMsg extends OutBaseMsg {
+    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
+    private String MsgType = "music";
+    @XmlElement(name = "Music")
+    private MusicItem musicItem;
+
     public String getMsgType() {
         return MsgType;
     }
-
-    public String getTitle() {
-        return Title;
+    public MusicItem getMusicItem() {
+        return musicItem;
     }
 
-    public void setTitle(String title) {
-        Title = title;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
-    }
-
-    public String getMusicURL() {
-        return MusicURL;
-    }
-
-    public void setMusicURL(String musicURL) {
-        MusicURL = musicURL;
-    }
-
-    public String getHQMusicUrl() {
-        return HQMusicUrl;
-    }
-
-    public void setHQMusicUrl(String HQMusicUrl) {
-        this.HQMusicUrl = HQMusicUrl;
-    }
-
-    public String getThumbMediaId() {
-        return ThumbMediaId;
-    }
-
-    public void setThumbMediaId(String thumbMediaId) {
-        ThumbMediaId = thumbMediaId;
+    public void setMusicItem(MusicItem musicItem) {
+        this.musicItem = musicItem;
     }
 }

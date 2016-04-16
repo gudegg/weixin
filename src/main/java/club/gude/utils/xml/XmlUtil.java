@@ -1,4 +1,4 @@
-package club.gude.utils;
+package club.gude.utils.xml;
 
 import club.gude.entity.msg.in.*;
 import com.google.common.base.Strings;
@@ -74,7 +74,6 @@ public class XmlUtil {
     }
 
     /**
-     *
      * @param strXml
      * @return 传入消息对象 用户自己进行强制转换
      */
@@ -108,22 +107,22 @@ public class XmlUtil {
                 reflectVal(inImageMsg, iter);
                 return inImageMsg;
 
-            }else if (msgType.equalsIgnoreCase("voice")) {
+            } else if (msgType.equalsIgnoreCase("voice")) {
                 InVoiceMsg inVoiceMsg = new InVoiceMsg();
                 reflectVal(inVoiceMsg, iter);
                 return inVoiceMsg;
 
-            }else if (msgType.equalsIgnoreCase("video")||msgType.equalsIgnoreCase("shortvideo")) {
+            } else if (msgType.equalsIgnoreCase("video") || msgType.equalsIgnoreCase("shortvideo")) {
                 InVedioMsg inVedioMsg = new InVedioMsg();
                 reflectVal(inVedioMsg, iter);
                 return inVedioMsg;
 
-            }else if (msgType.equalsIgnoreCase("location")) {
+            } else if (msgType.equalsIgnoreCase("location")) {
                 InLocationMsg inLocationMsg = new InLocationMsg();
                 reflectVal(inLocationMsg, iter);
                 return inLocationMsg;
 
-            }else if (msgType.equalsIgnoreCase("link")) {
+            } else if (msgType.equalsIgnoreCase("link")) {
                 InLinkMsg inLinkMsg = new InLinkMsg();
                 reflectVal(inLinkMsg, iter);
                 return inLinkMsg;
@@ -174,6 +173,7 @@ public class XmlUtil {
 
         }
     }
+
     /**
      * 生成xml文件
      *
@@ -186,7 +186,7 @@ public class XmlUtil {
         Element e = null;
         for (String s : map.keySet()) {
             e = rootElement.addElement(s);
-            e.setText(map.get(s));
+            e.addCDATA(map.get(s));
         }
         //抛弃头<?xml version="1.0" encoding="UTF-8"?> document.asXML()会有这个头
         return document.getRootElement().asXML();

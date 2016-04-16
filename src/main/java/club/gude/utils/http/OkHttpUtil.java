@@ -41,6 +41,7 @@ public class OkHttpUtil {
         }
         return null;
     }
+
     /**
      * 同步get
      */
@@ -58,6 +59,10 @@ public class OkHttpUtil {
         }
         return null;
     }
+
+    /**
+     * 同步get
+     */
     public static ResponseBody syncGet(String url, Map<String, String> param) {
         for (String s : param.keySet()) {
             url += "?" + s + "=" + param.get(s);

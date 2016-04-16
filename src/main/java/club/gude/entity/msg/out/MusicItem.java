@@ -4,25 +4,24 @@ import club.gude.utils.xml.AdapterStringCDATA;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * @Author Gude
- * @Date 2016/4/8.
+ * @Date 2016/4/16.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class NewsItem {
+public class MusicItem {
     @XmlJavaTypeAdapter(AdapterStringCDATA.class)
     private String Title;
     @XmlJavaTypeAdapter(AdapterStringCDATA.class)
     private String Description;
-    //图片链接，支持JPG、PNG格式，较好的效果为大图360*200，小图200*200
     @XmlJavaTypeAdapter(AdapterStringCDATA.class)
-    private String PicUrl;
-    //点击图文消息跳转链接
+    private String MusicURL;
     @XmlJavaTypeAdapter(AdapterStringCDATA.class)
-    private String Url;
+    private String HQMusicUrl;
+    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
+    private String ThumbMediaId;
 
     public String getTitle() {
         return Title;
@@ -40,19 +39,27 @@ public class NewsItem {
         Description = description;
     }
 
-    public String getPicUrl() {
-        return PicUrl;
+    public String getMusicURL() {
+        return MusicURL;
     }
 
-    public void setPicUrl(String picUrl) {
-        PicUrl = picUrl;
+    public void setMusicURL(String musicURL) {
+        MusicURL = musicURL;
     }
 
-    public String getUrl() {
-        return Url;
+    public String getHQMusicUrl() {
+        return HQMusicUrl;
     }
 
-    public void setUrl(String url) {
-        Url = url;
+    public void setHQMusicUrl(String HQMusicUrl) {
+        this.HQMusicUrl = HQMusicUrl;
+    }
+
+    public String getThumbMediaId() {
+        return ThumbMediaId;
+    }
+
+    public void setThumbMediaId(String thumbMediaId) {
+        ThumbMediaId = thumbMediaId;
     }
 }

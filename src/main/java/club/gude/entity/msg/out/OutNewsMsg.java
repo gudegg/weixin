@@ -1,6 +1,11 @@
 package club.gude.entity.msg.out;
 
-import java.util.List;
+import club.gude.utils.xml.AdapterIntegerCDATA;
+import club.gude.utils.xml.AdapterStringCDATA;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * @Author Gude
@@ -30,15 +35,21 @@ import java.util.List;
  * </Articles>
  * </xml>
  */
+@XmlRootElement(name = "xml")
 public class OutNewsMsg extends OutBaseMsg {
+    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
     private String MsgType = "news";
+    @XmlJavaTypeAdapter(AdapterIntegerCDATA.class)
     private Integer ArticleCount;
     //多条图文消息信息，默认第一个item为大图,注意，如果图文数超过10，则将会无响应
-    private List<NewsItem> Articles;
+    @XmlElement(name = "Articles")
+    private NewsArticles newsList;
 
     public String getMsgType() {
         return MsgType;
     }
+
+
 
     public Integer getArticleCount() {
         return ArticleCount;
@@ -48,11 +59,11 @@ public class OutNewsMsg extends OutBaseMsg {
         ArticleCount = articleCount;
     }
 
-    public List<NewsItem> getArticles() {
-        return Articles;
+    public NewsArticles getNewsList() {
+        return newsList;
     }
 
-    public void setArticles(List<NewsItem> articles) {
-        Articles = articles;
+    public void setNewsList(NewsArticles newsList) {
+        this.newsList = newsList;
     }
 }

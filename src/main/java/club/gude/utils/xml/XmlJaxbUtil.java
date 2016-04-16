@@ -1,24 +1,18 @@
-package club.gude.utils;
+package club.gude.utils.xml;
 
 import club.gude.entity.msg.in.*;
 import club.gude.entity.msg.out.OutBaseMsg;
 import com.google.common.base.Strings;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import static club.gude.utils.XmlUtil.reflectVal;
+import java.io.Writer;
 
 /**
  * @Author Gude
@@ -27,6 +21,7 @@ import static club.gude.utils.XmlUtil.reflectVal;
 public class XmlJaxbUtil {
     /**
      * jaxb xml转为对象
+     *
      * @param strXml xml
      * @return 对象
      * @throws JAXBException
@@ -74,14 +69,27 @@ public class XmlJaxbUtil {
         return jaxbUnmarshaller.unmarshal(new StringReader(strXml));
     }
 
+    /**
+     * 对象转化为XML
+     *
+     * @param outBaseMsg
+     * @return
+     * @throws JAXBException
+     */
 
     public static String xmlCreate_MsgOut(OutBaseMsg outBaseMsg) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(outBaseMsg.getClass(),OutBaseMsg.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(outBaseMsg.getClass(), OutBaseMsg.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         //是否输出头 True不输出 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
         //格式化
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        jaxbMarshaller.setProperty(CharacterEscapeHandler.class.getName(), new CharacterEscapeHandler() {
+            @Override
+            public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
+                writer.write(ac, i, j);
+            }
+        });
         StringWriter writer = new StringWriter();
         jaxbMarshaller.marshal(outBaseMsg, writer);
         return writer.toString();

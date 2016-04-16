@@ -4,8 +4,8 @@ import club.gude.config.WechatConfig;
 import club.gude.entity.msg.in.*;
 import club.gude.entity.msg.out.OutTextMsg;
 import club.gude.utils.SignUtil;
-import club.gude.utils.XmlJaxbUtil;
-import club.gude.utils.XmlUtil;
+import club.gude.utils.xml.XmlJaxbUtil;
+import club.gude.utils.xml.XmlUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
@@ -68,6 +68,8 @@ public class AccessController {
             try {
                 InputStream is = request.getInputStream();
                 String receive_msg = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
+
+                logger.info("\n接收消息:" + receive_msg);
                 Map<String, String> receive_map = null;
                 //判断使用明文模式 还是加密模式
                 if (WechatConfig.EncryptMessage) {
@@ -135,7 +137,23 @@ public class AccessController {
                     return replyMsg;
                 } else {
                     //明文无需解密
-                    receive_map = XmlUtil.xmlResolve(receive_msg);
+                    //                    receive_map = XmlUtil.xmlResolve(receive_msg);
+                    //                    Map map = new HashMap();
+                    //                    map.put("ToUserName", receive_map.get("FromUserName"));
+                    //                    map.put("FromUserName", receive_map.get("ToUserName"));
+                    //                    map.put("CreateTime", System.currentTimeMillis() + "");
+                    //                    map.put("MsgType", "text");
+                    //                    map.put("Content", "欢迎你");
+                    //                    String replyMsg = XmlUtil.xmlCreate(map);
+                    InTextMsg inTexitMsg = (InTextMsg) XmlJaxbUtil.xmlResolve_MsgIn(receive_msg);
+                    OutTextMsg outTextMsg = new OutTextMsg();
+                    outTextMsg.setContent("收到你的文本");
+                    outTextMsg.setFromUserName(inTexitMsg.getToUserName());
+                    outTextMsg.setToUserName(inTexitMsg.getFromUserName());
+
+                    String replyMsg = XmlJaxbUtil.xmlCreate_MsgOut(outTextMsg);
+                    logger.info("\n回复消息:" + replyMsg);
+                    return replyMsg;
                 }
 
 
