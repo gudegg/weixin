@@ -1,4 +1,4 @@
-package club.gude.entity.customer;
+package club.gude.entity.kfcustomer;
 
 /**
  * @Author Gude
