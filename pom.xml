@@ -21,6 +21,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
+        <!-- 跳过测试 -->
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <dependencies>
