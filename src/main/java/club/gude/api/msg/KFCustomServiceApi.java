@@ -1,4 +1,4 @@
-package club.gude.api.kfcustomer;
+package club.gude.api.msg;
 
 import club.gude.entity.kfcustomer.KF;
 import club.gude.entity.kfcustomer.KFHead;
