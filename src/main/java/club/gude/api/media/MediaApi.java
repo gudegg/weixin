@@ -20,6 +20,7 @@ import static org.apache.coyote.http11.Constants.a;
 /**
  * @Author Gude
  * @Date 2016/4/12.
+ * 素材API
  */
 public class MediaApi {
     /**
