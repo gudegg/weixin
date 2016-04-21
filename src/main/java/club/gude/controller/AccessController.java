@@ -1,5 +1,6 @@
 package club.gude.controller;
 
+import club.gude.api.Authorize.AuthorizeApi;
 import club.gude.config.WechatConfig;
 import club.gude.entity.msg.in.*;
 import club.gude.entity.msg.out.OutTextMsg;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -145,6 +147,8 @@ public class AccessController {
                     //                    map.put("MsgType", "text");
                     //                    map.put("Content", "欢迎你");
                     //                    String replyMsg = XmlUtil.xmlCreate(map);
+
+
                     InTextMsg inTexitMsg = (InTextMsg) XmlJaxbUtil.xmlResolve_MsgIn(receive_msg);
                     OutTextMsg outTextMsg = new OutTextMsg();
                     outTextMsg.setContent("收到你的文本");
@@ -165,5 +169,11 @@ public class AccessController {
         }
 
         return null;
+    }
+
+    @RequestMapping("/auth")
+    public void authorize(String code) throws IOException {
+       String res= AuthorizeApi.codeExchangeToken(code,WechatConfig.Appid,WechatConfig.AppSecret);
+        System.out.println(res);
     }
 }

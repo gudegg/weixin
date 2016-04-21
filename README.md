@@ -6,3 +6,4 @@
 - QFApi 群发
 - TemplateApi 模板
 - KFCustomServiceApi 客服
+- MenunApi 菜单
