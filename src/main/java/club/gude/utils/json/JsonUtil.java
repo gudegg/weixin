@@ -2,11 +2,9 @@ package club.gude.utils.json;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 
 import java.util.List;
 
-import static javafx.scene.input.KeyCode.T;
 
 /**
  * @Author Gude
