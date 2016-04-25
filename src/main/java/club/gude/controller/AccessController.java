@@ -1,6 +1,6 @@
 package club.gude.controller;
 
-import club.gude.api.authorize.AuthorizeApi;
+import club.gude.api.Authorize.AuthorizeApi;
 import club.gude.config.WechatConfig;
 import club.gude.entity.msg.in.*;
 import club.gude.entity.msg.out.OutTextMsg;
