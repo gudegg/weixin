@@ -13,10 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static club.gude.utils.http.OkHttpUtil.MEDIA_TYPE_JSON;
-import static club.gude.utils.http.OkHttpUtil.syncPostByJson;
-import static org.apache.coyote.http11.Constants.a;
-
 /**
  * @Author Gude
  * @Date 2016/4/12.

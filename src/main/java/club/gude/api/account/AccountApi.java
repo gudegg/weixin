@@ -12,9 +12,6 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import static club.gude.utils.http.OkHttpUtil.syncGet;
-
 /**
  * @Author Gude
  * @Date 2016/4/25.
