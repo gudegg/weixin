@@ -1,4 +1,4 @@
-package club.gude.api.Authorize;
+package club.gude.api.authorize;
 
 import club.gude.utils.http.OkHttpUtil;
 import com.squareup.okhttp.ResponseBody;
@@ -6,10 +6,6 @@ import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
-import static club.gude.utils.http.OkHttpUtil.syncGet;
-import static java.security.KeyRep.Type.SECRET;
-
 /**
  * @Author Gude
  * @Date 2016/4/20.
