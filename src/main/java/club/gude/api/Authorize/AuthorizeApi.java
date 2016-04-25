@@ -1,4 +1,4 @@
-package club.gude.api.Authorize;
+package club.gude.api.authorize;
 
 import club.gude.utils.http.OkHttpUtil;
 import com.squareup.okhttp.ResponseBody;
@@ -99,7 +99,7 @@ public class AuthorizeApi {
      */
     public static String createOauth2Link(String appid, String redirect_uri, String scope, String state) throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
-        sb.append("https://open.weixin.qq.com/connect/oauth2/Authorize?appid=").append(appid).append("&redirect_uri=").append(URLEncoder.encode(redirect_uri, "utf-8")).append("&response_type=code").append("&scope=").append(scope);
+        sb.append("https://open.weixin.qq.com/connect/oauth2/authorize?appid=").append(appid).append("&redirect_uri=").append(URLEncoder.encode(redirect_uri, "utf-8")).append("&response_type=code").append("&scope=").append(scope);
         if (state != null) {
             sb.append("&state=").append(state);
         }
