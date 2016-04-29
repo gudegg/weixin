@@ -1,4 +1,4 @@
-package club.gude.entity.data;
+package club.gude.entity.datacube;
 
 /**
  * @Author Gude
@@ -40,5 +40,15 @@ public class UserSummary {
 
     public void setCancel_user(int cancel_user) {
         this.cancel_user = cancel_user;
+    }
+
+    @Override
+    public String toString() {
+        return "UserSummary{" +
+                "ref_date='" + ref_date + '\'' +
+                ", user_source=" + user_source +
+                ", new_user=" + new_user +
+                ", cancel_user=" + cancel_user +
+                '}';
     }
 }
