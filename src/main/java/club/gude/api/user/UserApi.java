@@ -1,11 +1,10 @@
 package club.gude.api.user;
 
-import club.gude.entity.user.Group;
-import club.gude.entity.user.UserInfo;
+import club.gude.entity.BaseRes;
+import club.gude.entity.user.*;
 import club.gude.utils.http.OkHttpUtil;
 import club.gude.utils.json.JsonUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class UserApi {
      */
     public static Group createGroupResObj(String access_token, String groupName) throws IOException {
         String res = createGroup(access_token, groupName);
-        return JsonUtil.strToObj(res,"group",Group.class);
+        return JsonUtil.strToObj(res, "group", Group.class);
     }
 
     /**
@@ -63,6 +62,7 @@ public class UserApi {
         return responseBody.string();
 
     }
+
     /**
      * 查询所有分组
      *
@@ -70,11 +70,12 @@ public class UserApi {
      * @return
      * @throws IOException
      */
-    public static List<Group> getGroupsResObj(String access_token) throws IOException {
-        String res=getGroups(access_token);
-        return JsonUtil.strToListObj(res,"groups",Group.class);
+    public static List<Groups> getGroupsResObj(String access_token) throws IOException {
+        String res = getGroups(access_token);
+        return JsonUtil.strToListObj(res, "groups", Groups.class);
 
     }
+
     /**
      * 查询用户所在分组
      *
@@ -123,6 +124,7 @@ public class UserApi {
     }
 
     /**
+     * 批量移动用户分组
      * @param access_token
      * @param openid_list  用户唯一标识符openid的列表（size不能超过50）
      * @param to_groupid   分组id
@@ -158,6 +160,76 @@ public class UserApi {
         return responseBody.string();
 
     }
+
+    /**
+     * **************************************************************
+     * 标签(新版接口分组改为标签)
+     * **************************************************************
+     */
+    /**
+     * 创建标签
+     *
+     * @param access_token
+     * @param name         标签名（30个字符以内）
+     * @return
+     * @throws IOException
+     */
+    public static Tags createTag(String access_token, String name) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token=" + access_token;
+        String json = "{\"tag\":{\"name\":\"" + name + "\"}}";
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
+        return JSON.parseObject(responseBody.string(), Tags.class);
+    }
+
+    /**
+     * 获取公众号已创建的标签
+     *
+     * @param access_token
+     * @return
+     * @throws IOException
+     */
+
+    public static TagsList getTags(String access_token) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/get?access_token=" + access_token;
+        ResponseBody responseBody = OkHttpUtil.syncGet(url);
+        return JSON.parseObject(responseBody.string(), TagsList.class);
+    }
+
+    /**
+     * @param access_token
+     * @param id           标签id，由微信分配
+     * @param name         标签名，UTF8编码
+     * @return
+     * @throws IOException
+     */
+    public static BaseRes updateTag(String access_token, int id, String name) throws IOException {
+        Tag tag = new Tag();
+        tag.setId(id);
+        tag.setName(name);
+        tag.setCount(null);
+        Tags tags = new Tags();
+        tags.setTag(tag);
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/update?access_token=" + access_token;
+
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(tags));
+        return JSON.parseObject(responseBody.string(), BaseRes.class);
+    }
+
+    /**
+     * TODO 测试失败
+     * 删除标签
+     * @param access_token
+     * @param id
+     */
+    public static BaseRes delTag(String access_token, int id) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/delete?access_token=" + access_token;
+        Map map = new HashMap();
+        map.put("tagid", id);
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(map));
+        return JSON.parseObject(responseBody.string(), BaseRes.class);
+
+    }
+
 
     /**
      * 设置用户备注名
@@ -246,7 +318,7 @@ public class UserApi {
      */
     public static List<UserInfo> batchUserInfoResObj(String access_token, List<String> openIds, String lang) throws IOException {
         String res = batchUserInfo(access_token, openIds, lang);
-       return JsonUtil.strToListObj(res,"user_info_list",UserInfo.class);
+        return JsonUtil.strToListObj(res, "user_info_list", UserInfo.class);
     }
 
     /**

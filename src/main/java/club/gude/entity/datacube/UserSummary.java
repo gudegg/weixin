@@ -1,10 +1,12 @@
 package club.gude.entity.datacube;
 
+import club.gude.entity.BaseRes;
+
 /**
  * @Author Gude
  * @Date 2016/4/25.
  */
-public class UserSummary {
+public class UserSummary extends BaseRes{
     private String ref_date;
     private int user_source;
     private int new_user;
@@ -49,6 +51,6 @@ public class UserSummary {
                 ", user_source=" + user_source +
                 ", new_user=" + new_user +
                 ", cancel_user=" + cancel_user +
-                '}';
+                '}'+";"+super.toString();
     }
 }

@@ -1,9 +1,11 @@
 package club.gude.entity.datacube;
 
+import club.gude.entity.BaseRes;
+
 /**
  * Created by Gude on 2016/4/29.
  */
-public class UserCumulate {
+public class UserCumulate extends BaseRes{
     private String ref_date;
     private int cumulate_user;
 
@@ -28,6 +30,6 @@ public class UserCumulate {
         return "UserCumulate{" +
                 "ref_date='" + ref_date + '\'' +
                 ", cumulate_user=" + cumulate_user +
-                '}';
+                '}'+";"+super.toString();
     }
 }

@@ -1,14 +1,20 @@
 package club.gude.entity.user;
 
-import club.gude.entity.BaseRes;
-
 /**
- * @Author Gude
- * @Date 2016/4/24.
+ * Created by Gude on 2016/5/1.
  */
-public class Group extends BaseRes {
+public class Tag {
     private int id;
     private String name;
+    private Integer count;
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
     public int getId() {
         return id;
@@ -28,9 +34,10 @@ public class Group extends BaseRes {
 
     @Override
     public String toString() {
-        return "Group{" +
+        return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                '}' + ";" + super.toString();
+                ", count=" + count +
+                '}';
     }
 }

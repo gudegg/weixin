@@ -1,29 +1,14 @@
 package club.gude.entity.account;
 
+import club.gude.entity.BaseRes;
+
 /**
  * @Author Gude
  * @Date 2016/4/25.
  */
-public class Shorturl {
-    private int errcode;
-    private String errmsg;
+public class Shorturl extends BaseRes{
     private String short_url;
 
-    public int getErrcode() {
-        return errcode;
-    }
-
-    public void setErrcode(int errcode) {
-        this.errcode = errcode;
-    }
-
-    public String getErrmsg() {
-        return errmsg;
-    }
-
-    public void setErrmsg(String errmsg) {
-        this.errmsg = errmsg;
-    }
 
     public String getShort_url() {
         return short_url;
@@ -36,9 +21,7 @@ public class Shorturl {
     @Override
     public String toString() {
         return "Shorturl{" +
-                "errcode=" + errcode +
-                ", errmsg='" + errmsg + '\'' +
-                ", short_url='" + short_url + '\'' +
-                '}';
+                "short_url='" + short_url + '\'' +
+                '}'+";"+super.toString();
     }
 }
