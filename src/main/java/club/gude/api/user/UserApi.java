@@ -5,6 +5,7 @@ import club.gude.entity.user.*;
 import club.gude.utils.http.OkHttpUtil;
 import club.gude.utils.json.JsonUtil;
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
@@ -125,6 +126,7 @@ public class UserApi {
 
     /**
      * 批量移动用户分组
+     *
      * @param access_token
      * @param openid_list  用户唯一标识符openid的列表（size不能超过50）
      * @param to_groupid   分组id
@@ -158,75 +160,6 @@ public class UserApi {
         String json = "{\"group\":{\"id\":" + groupId + "}}";
         ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
         return responseBody.string();
-
-    }
-
-    /**
-     * **************************************************************
-     * 标签(新版接口分组改为标签)
-     * **************************************************************
-     */
-    /**
-     * 创建标签
-     *
-     * @param access_token
-     * @param name         标签名（30个字符以内）
-     * @return
-     * @throws IOException
-     */
-    public static Tags createTag(String access_token, String name) throws IOException {
-        String url = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token=" + access_token;
-        String json = "{\"tag\":{\"name\":\"" + name + "\"}}";
-        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
-        return JSON.parseObject(responseBody.string(), Tags.class);
-    }
-
-    /**
-     * 获取公众号已创建的标签
-     *
-     * @param access_token
-     * @return
-     * @throws IOException
-     */
-
-    public static TagsList getTags(String access_token) throws IOException {
-        String url = "https://api.weixin.qq.com/cgi-bin/tags/get?access_token=" + access_token;
-        ResponseBody responseBody = OkHttpUtil.syncGet(url);
-        return JSON.parseObject(responseBody.string(), TagsList.class);
-    }
-
-    /**
-     * @param access_token
-     * @param id           标签id，由微信分配
-     * @param name         标签名，UTF8编码
-     * @return
-     * @throws IOException
-     */
-    public static BaseRes updateTag(String access_token, int id, String name) throws IOException {
-        Tag tag = new Tag();
-        tag.setId(id);
-        tag.setName(name);
-        tag.setCount(null);
-        Tags tags = new Tags();
-        tags.setTag(tag);
-        String url = "https://api.weixin.qq.com/cgi-bin/tags/update?access_token=" + access_token;
-
-        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(tags));
-        return JSON.parseObject(responseBody.string(), BaseRes.class);
-    }
-
-    /**
-     * TODO 测试失败
-     * 删除标签
-     * @param access_token
-     * @param id
-     */
-    public static BaseRes delTag(String access_token, int id) throws IOException {
-        String url = "https://api.weixin.qq.com/cgi-bin/tags/delete?access_token=" + access_token;
-        Map map = new HashMap();
-        map.put("tagid", id);
-        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(map));
-        return JSON.parseObject(responseBody.string(), BaseRes.class);
 
     }
 
@@ -350,5 +283,164 @@ public class UserApi {
     public static String getAllUser(String access_token) throws IOException {
         return getAllUser(access_token, null);
     }
+    /**
+     * **************************************************************
+     * 标签(新版接口分组改为标签)
+     * **************************************************************
+     */
+    /**
+     * 创建标签
+     *
+     * @param access_token
+     * @param name         标签名（30个字符以内）
+     * @return
+     * @throws IOException
+     */
+    public static Tags createTag(String access_token, String name) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token=" + access_token;
+        String json = "{\"tag\":{\"name\":\"" + name + "\"}}";
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
+        return JSON.parseObject(responseBody.string(), Tags.class);
+    }
+
+    /**
+     * 获取公众号已创建的标签
+     *
+     * @param access_token
+     * @return
+     * @throws IOException
+     */
+
+    public static TagsList getTags(String access_token) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/get?access_token=" + access_token;
+        ResponseBody responseBody = OkHttpUtil.syncGet(url);
+        return JSON.parseObject(responseBody.string(), TagsList.class);
+    }
+
+    /**
+     * 编辑标签
+     *
+     * @param access_token
+     * @param id           标签id，由微信分配
+     * @param name         标签名，UTF8编码
+     * @return
+     * @throws IOException
+     */
+    public static BaseRes updateTag(String access_token, int id, String name) throws IOException {
+        Tag tag = new Tag();
+        tag.setId(id);
+        tag.setName(name);
+        tag.setCount(null);
+        Tags tags = new Tags();
+        tags.setTag(tag);
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/update?access_token=" + access_token;
+
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(tags));
+        return JSON.parseObject(responseBody.string(), BaseRes.class);
+    }
+
+    /**
+     * 删除标签(微信官方文档json格式错误)
+     *
+     * @param access_token
+     * @param id           标签id，由微信分配
+     */
+    public static BaseRes delTag(String access_token, int id) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/delete?access_token=" + access_token;
+        //Map map = new HashMap();
+        //map.put("tagid", id);
+        String json = "{\"tag\":{\"id\":" + id + "}}";
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
+        return JSON.parseObject(responseBody.string(), BaseRes.class);
+
+    }
+
+    /**
+     * 获取标签下粉丝列表
+     *
+     * @param access_token
+     * @param tagid        标签id，由微信分配
+     * @param next_openid  第一个拉取的OPENID，不填默认从头开始拉取
+     * @return
+     * @throws IOException
+     */
+
+    public static Fans getFans(String access_token, int tagid, String next_openid) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/user/tag/get?access_token=" + access_token;
+        Map map = new HashMap();
+        if (!Strings.isNullOrEmpty(next_openid)) {
+            map.put("next_openid", next_openid);
+        }
+        map.put("tagid", tagid);
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(map));
+        return JSON.parseObject(responseBody.string(), Fans.class);
+
+
+    }
+
+    /**
+     * 获取标签下粉丝列表(从头开始拉取)
+     *
+     * @param access_token
+     * @param tagid        标签id，由微信分配
+     * @return
+     * @throws IOException
+     */
+    public static Fans getFans(String access_token, int tagid) throws IOException {
+        return getFans(access_token, tagid, null);
+    }
+
+    /**
+     * 批量为用户打标签
+     *
+     * @param access_token
+     * @param tagid        标签id，由微信分配
+     * @param openid_list  批量用户openid
+     * @return
+     * @throws IOException
+     */
+    public static BaseRes batchTagging(String access_token, int tagid, List<String> openid_list) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token=" + access_token;
+        Map map = new HashMap();
+        map.put("tagid", tagid);
+        map.put("openid_list", openid_list);
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(map));
+        return JSON.parseObject(responseBody.string(), BaseRes.class);
+    }
+
+    /**
+     * 批量为用户取消标签
+     *
+     * @param access_token
+     * @param tagid        标签id，由微信分配
+     * @param openid_list  批量用户openid
+     * @return
+     * @throws IOException
+     */
+    public static BaseRes batchUntagging(String access_token, int tagid, List<String> openid_list) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/members/batchuntagging?access_token=" + access_token;
+        Map map = new HashMap();
+        map.put("tagid", tagid);
+        map.put("openid_list", openid_list);
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, JSON.toJSONString(map));
+        return JSON.parseObject(responseBody.string(), BaseRes.class);
+    }
+
+    /**
+     * 获取用户身上的标签列表
+     *
+     * @param access_token
+     * @param openid       用户openid
+     * @return
+     * @throws IOException
+     */
+    public static TagIdList getIdList(String access_token, String openid) throws IOException {
+        String url = "https://api.weixin.qq.com/cgi-bin/tags/getidlist?access_token=" + access_token;
+        String json = "{\"openid\" : \"" + openid + "\"}";
+        ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
+        return JSON.parseObject(responseBody.string(), TagIdList.class);
+
+    }
+
 
 }
