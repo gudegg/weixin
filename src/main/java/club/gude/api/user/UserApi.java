@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @Author Gude
  * @Date 2016/4/21.
- * 用户管理
+ * 用户管理(分组在新版微信API中全部替换为标签)
  */
 public class UserApi {
     /**
@@ -28,6 +28,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static String createGroup(String access_token, String groupName) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/groups/create?access_token=" + access_token;
         String json = "{\"group\":{\"name\":\"" + groupName + "\"}}";
@@ -45,6 +46,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static Group createGroupResObj(String access_token, String groupName) throws IOException {
         String res = createGroup(access_token, groupName);
         return JsonUtil.strToObj(res, "group", Group.class);
@@ -57,6 +59,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static String getGroups(String access_token) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token=" + access_token;
         ResponseBody responseBody = OkHttpUtil.syncGet(url);
@@ -71,6 +74,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static List<Groups> getGroupsResObj(String access_token) throws IOException {
         String res = getGroups(access_token);
         return JsonUtil.strToListObj(res, "groups", Groups.class);
@@ -85,6 +89,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static String getGroupByOpenId(String access_token, String openId) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/groups/getid?access_token=" + access_token;
         String json = "{\"openid\":\"" + openId + "\"}";
@@ -100,6 +105,7 @@ public class UserApi {
      * @param groupName    分组名字（30个字符以内）
      * @return
      */
+    @Deprecated
     public static String updateGroup(String access_token, int groupId, String groupName) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/groups/update?access_token=" + access_token;
         String json = "{\"group\":{\"id\":" + groupId + ",\"name\":\"" + groupName + "\"}}";
@@ -117,6 +123,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static String moveGroup(String access_token, String openId, int to_groupid) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/groups/members/update?access_token=" + access_token;
         String json = "{\"openid\":\"" + openId + "\",\"to_groupid\":" + to_groupid + "}";
@@ -133,6 +140,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static String batchMoveGroup(String access_token, List<String> openid_list, int to_groupid) throws IOException {
         if (openid_list.size() > 50) {
             throw new RuntimeException("size不能超过50");
@@ -155,6 +163,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
+    @Deprecated
     public static String delGroup(String access_token, int groupId) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/groups/delete?access_token=" + access_token;
         String json = "{\"group\":{\"id\":" + groupId + "}}";
@@ -173,14 +182,14 @@ public class UserApi {
      * @return
      * @throws IOException
      */
-    public static String updateUserRemark(String access_token, String openId, String remark) throws IOException {
+    public static BaseRes updateUserRemark(String access_token, String openId, String remark) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=" + access_token;
         Map map = new HashMap();
         map.put("openid", openId);
         map.put("remark", remark);
         String json = JSON.toJSONString(map);
         ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
-        return responseBody.string();
+        return JSON.parseObject(responseBody.string(), BaseRes.class);
     }
 
     /**
@@ -191,7 +200,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
-    public static String getUserInfo(String access_token, String openId) throws IOException {
+    public static UserInfo getUserInfo(String access_token, String openId) throws IOException {
         return getUserInfo(access_token, openId, null);
     }
 
@@ -204,7 +213,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
-    public static String getUserInfo(String access_token, String openId, String lang) throws IOException {
+    public static UserInfo getUserInfo(String access_token, String openId, String lang) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("https://api.weixin.qq.com/cgi-bin/user/info").append("?access_token=").append(access_token).append("&openid=").append(openId);
 
@@ -214,7 +223,7 @@ public class UserApi {
             sb.append("&lang=").append(lang);
         }
         ResponseBody responseBody = OkHttpUtil.syncGet(sb.toString());
-        return responseBody.string();
+        return JSON.parseObject(responseBody.string(), UserInfo.class);
     }
 
     /**
@@ -225,7 +234,7 @@ public class UserApi {
      * @param lang         国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语，默认为zh-CN
      * @return
      */
-    public static String batchUserInfo(String access_token, List<String> openIds, String lang) throws IOException {
+    public static UserInfoList batchUserInfo(String access_token, List<String> openIds, String lang) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=" + access_token;
         List<Map> opens = new ArrayList<>();
         for (String openid : openIds) {
@@ -238,21 +247,21 @@ public class UserApi {
         mapJson.put("user_list", opens);
         String json = JSON.toJSONString(mapJson);
         ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
-        return responseBody.string();
+        return JSON.parseObject(responseBody.string(), UserInfoList.class);
     }
 
-    /**
-     * 批量获取用户基本信息
-     *
-     * @param access_token
-     * @param openIds
-     * @param lang         国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语，默认为zh-CN
-     * @return
-     */
-    public static List<UserInfo> batchUserInfoResObj(String access_token, List<String> openIds, String lang) throws IOException {
-        String res = batchUserInfo(access_token, openIds, lang);
-        return JsonUtil.strToListObj(res, "user_info_list", UserInfo.class);
-    }
+    //    /**
+    //     * 批量获取用户基本信息
+    //     *
+    //     * @param access_token
+    //     * @param openIds
+    //     * @param lang         国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语，默认为zh-CN
+    //     * @return
+    //     */
+    //    public static List<UserInfo> batchUserInfoResObj(String access_token, List<String> openIds, String lang) throws IOException {
+    //        String res = batchUserInfo(access_token, openIds, lang);
+    //        return JsonUtil.strToListObj(res, "user_info_list", UserInfo.class);
+    //    }
 
     /**
      * 一次拉取调用最多拉取10000个关注者的OpenID，可以通过多次拉取的方式来满足需求。
@@ -262,14 +271,14 @@ public class UserApi {
      * @return
      * @throws IOException
      */
-    public static String getAllUser(String access_token, String next_openid) throws IOException {
+    public static UserList getAllUser(String access_token, String next_openid) throws IOException {
         StringBuilder url = new StringBuilder();
         url.append("https://api.weixin.qq.com/cgi-bin/user/get?access_token=").append(access_token);
         if (next_openid != null) {
             url.append("&next_openid=").append(next_openid);
         }
         ResponseBody responseBody = OkHttpUtil.syncGet(url.toString());
-        return responseBody.string();
+        return JSON.parseObject(responseBody.string(), UserList.class);
 
     }
 
@@ -280,7 +289,7 @@ public class UserApi {
      * @return
      * @throws IOException
      */
-    public static String getAllUser(String access_token) throws IOException {
+    public static UserList getAllUser(String access_token) throws IOException {
         return getAllUser(access_token, null);
     }
     /**

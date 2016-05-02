@@ -1,10 +1,14 @@
 package club.gude.entity.user;
 
+import club.gude.entity.BaseRes;
+
+import java.util.Arrays;
+
 /**
  * @Author Gude
  * @Date 2016/4/24.
  */
-public class UserInfo {
+public class UserInfo extends BaseRes{
 
     private int subscribe;
     private String openid;
@@ -19,6 +23,16 @@ public class UserInfo {
     private String unionid;
     private String remark;
     private int groupid;
+    private String []tagid_list;
+
+
+    public String[] getTagid_list() {
+        return tagid_list;
+    }
+
+    public void setTagid_list(String[] tagid_list) {
+        this.tagid_list = tagid_list;
+    }
 
     public int getSubscribe() {
         return subscribe;
@@ -140,6 +154,7 @@ public class UserInfo {
                 ", unionid='" + unionid + '\'' +
                 ", remark='" + remark + '\'' +
                 ", groupid=" + groupid +
-                '}';
+                ", tagid_list=" + Arrays.toString(tagid_list) +
+                '}'+";"+super.toString();
     }
 }
