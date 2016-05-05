@@ -1,9 +1,11 @@
 package club.gude.api.media;
 
+import club.gude.entity.BaseRes;
 import club.gude.entity.media.Article;
+import club.gude.entity.media.Media;
+import club.gude.entity.media.MediaCount;
 import club.gude.utils.http.OkHttpUtil;
 import com.alibaba.fastjson.JSON;
-import com.google.common.io.ByteStreams;
 import com.squareup.okhttp.*;
 
 import java.io.File;
@@ -43,6 +45,28 @@ public class MediaApi {
         return responseBody.string();
 
     }
+
+    /**
+     * 添加临时素材
+     * <p>
+     * 注意事项<br/>
+     * 上传的临时多媒体文件有格式和大小限制，如下：<br/>
+     * 图片（image）: 1M，支持JPG格式<br/>
+     * 语音（voice）：2M，播放长度不超过60s，支持AMR\MP3格式<br/>
+     * 视频（video）：10MB，支持MP4格式<br/>
+     * 缩略图（thumb）：64KB，支持JPG格式<br/>
+     * <p/>
+     *
+     * @param access_token
+     * @param type         媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb）
+     * @param file         上传文件
+     * @return
+     */
+    public static Media addTemporaryMediaResObj(String access_token, String type, File file) throws IOException {
+        String res = addTemporaryMedia(access_token, type, file);
+        return JSON.parseObject(res, Media.class);
+    }
+
 
     /**
      * 获取临时素材
@@ -90,6 +114,20 @@ public class MediaApi {
     }
 
     /**
+     * 新增永久图文素材
+     *
+     * @param access_token
+     * @param articles
+     * @return
+     */
+
+    public static Media addForeverNewsResObj(String access_token, List<Article> articles) throws IOException {
+        String res = addForeverNews(access_token, articles);
+        return JSON.parseObject(res, Media.class);
+
+    }
+
+    /**
      * 添加图文素材中的图片 ps:不占用公众号的素材库中图片数量的5000个的限制。图片仅支持jpg/png格式，大小必须在1MB以下。
      *
      * @param access_token
@@ -102,6 +140,18 @@ public class MediaApi {
         RequestBody requestBody = new MultipartBuilder().type(MultipartBuilder.FORM).addFormDataPart("access_token", access_token).addFormDataPart("media", file.getName(), filebody).build();
         ResponseBody responseBody = OkHttpUtil.syncPost(url, requestBody);
         return responseBody.string();
+    }
+
+    /**
+     * 添加图文素材中的图片 ps:不占用公众号的素材库中图片数量的5000个的限制。图片仅支持jpg/png格式，大小必须在1MB以下。
+     *
+     * @param access_token
+     * @param file         图片文件
+     * @return
+     */
+    public static Media addForeverNew_ImgRedObj(String access_token, File file) throws IOException {
+        String res = addForeverNew_Img(access_token, file);
+        return JSON.parseObject(res, Media.class);
     }
 
     /**
@@ -125,6 +175,21 @@ public class MediaApi {
     }
 
     /**
+     * 新增视频永久素材
+     *
+     * @param access_token
+     * @param title        视频素材的标题
+     * @param introduction 视频素材的描述
+     * @param file         视频文件
+     * @return
+     * @throws IOException
+     */
+    public static Media addForeverVideoResObj(String access_token, String title, String introduction, File file) throws IOException {
+        String res = addForeverVideo(access_token, title, introduction, file);
+        return JSON.parseObject(res, Media.class);
+    }
+
+    /**
      * 新增其他永久素材
      *
      * @param access_token
@@ -141,6 +206,19 @@ public class MediaApi {
         RequestBody requestBody = new MultipartBuilder().type(MultipartBuilder.FORM).addFormDataPart("media", file.getName(), filebody).addFormDataPart("type", type).addFormDataPart("access_token", access_token).build();
         ResponseBody responseBody = OkHttpUtil.syncPost(url, requestBody);
         return responseBody.string();
+    }
+
+    /**
+     * 新增其他永久素材
+     *
+     * @param access_token
+     * @param type         媒体文件类型，分别有图片（image）、语音（voice）、和缩略图（thumb）
+     * @param file         多媒体文件
+     * @return
+     */
+    public static Media addForeverOtherResObj(String access_token, String type, File file) throws IOException {
+        String res = addForeverOther(access_token, type, file);
+        return JSON.parseObject(res, Media.class);
     }
 
     /**
@@ -174,6 +252,19 @@ public class MediaApi {
     }
 
     /**
+     * 删除永久素材
+     *
+     * @param access_token
+     * @param media_id
+     * @return
+     */
+    public static BaseRes delForeverMediaResObj(String access_token, String media_id) throws IOException {
+        String res = delForeverMedia(access_token, media_id);
+        return JSON.parseObject(res, BaseRes.class);
+
+    }
+
+    /**
      * 修改永久图文素材
      *
      * @param media_id
@@ -194,6 +285,19 @@ public class MediaApi {
     }
 
     /**
+     * 修改永久图文素材
+     *
+     * @param media_id
+     * @param index    要更新的文章在图文消息中的位置（多图文消息时，此字段才有意义），第一篇为0
+     * @param article
+     * @return
+     */
+    public static BaseRes updateForeverNewsResObj(String access_token, String media_id, int index, Article article) throws IOException {
+        String res = updateForeverNews(access_token, media_id, index, article);
+        return JSON.parseObject(res, BaseRes.class);
+    }
+
+    /**
      * 获取素材总数
      *
      * @param access_token
@@ -202,6 +306,17 @@ public class MediaApi {
     public static String getMediaCount(String access_token) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=" + access_token;
         return OkHttpUtil.syncGet(url).string();
+    }
+
+    /**
+     * 获取素材总数
+     *
+     * @param access_token
+     * @return
+     */
+    public static MediaCount getMediaCountResObj(String access_token) throws IOException {
+        String res = getMediaCount(access_token);
+        return JSON.parseObject(res, MediaCount.class);
     }
 
     /**
