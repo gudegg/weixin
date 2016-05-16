@@ -1,4 +1,3 @@
-#### wechat
 > 微信API封装
 
 - TokenApi access_token
