@@ -66,6 +66,14 @@ public class XmlJaxbUtil {
         }
     }
 
+    /**
+     * jaxb xml转为对象
+     * @param strXml
+     * @param clz
+     * @param <T>
+     * @return
+     * @throws JAXBException
+     */
     public static <T> T xmlResolve_MsgIn(String strXml, Class<T> clz) throws JAXBException {
         if (Strings.isNullOrEmpty(strXml)) {
             return null;

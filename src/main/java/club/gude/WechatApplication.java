@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 @SpringBootApplication
-@EnableConfigurationProperties({WechatConfig.class})
+//@EnableConfigurationProperties({WechatConfig.class})
 public class WechatApplication  extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
