@@ -1,5 +1,6 @@
 package club.gude.utils.http;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.io.ByteStreams;
 import com.squareup.okhttp.*;
 
@@ -42,6 +43,10 @@ public class OkHttpUtil {
         return null;
     }
 
+    public static <T> T syncGet(String url,Class<T> clz) throws IOException {
+        ResponseBody body= syncGet(url);
+        return JSON.parseObject(body.string(),clz);
+    }
     /**
      * 同步get
      */

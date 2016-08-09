@@ -47,9 +47,11 @@ public class TokenTask {
 
 
     public static Token freshToken() throws IOException {
-        ResponseBody responseBody = OkHttpUtil.syncGet(url);
-        JSONObject jsonObject = JSON.parseObject(responseBody.string());
-        Token token = new Token(jsonObject.getString("access_token"), jsonObject.getLong("expires_in"));
+//        ResponseBody responseBody = OkHttpUtil.syncGet(url);
+//        JSONObject jsonObject = JSON.parseObject(responseBody.string());
+//        Token token = new Token(jsonObject.getString("access_token"), jsonObject.getLong("expires_in"));
+
+        Token token=OkHttpUtil.syncGet(url,Token.class);
         logger.info("access_token:"+token.getAccess_token());
         return token;
     }

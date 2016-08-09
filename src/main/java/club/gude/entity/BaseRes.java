@@ -4,7 +4,7 @@ package club.gude.entity;
  * Created by Gude on 2016/5/1.
  */
 public class BaseRes {
-    public static final Integer SUCCESS_CODE = 0;
+    private static final Integer SUCCESS_CODE = 0;
     private Integer errcode;
     private String errmsg;
 

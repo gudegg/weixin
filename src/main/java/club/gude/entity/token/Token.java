@@ -1,14 +1,19 @@
 package club.gude.entity.token;
 
+import club.gude.entity.BaseRes;
+
 /**
  * @Author Gude
  * @Date 2016/4/6.
  */
-public class Token {
+public class Token extends BaseRes{
     //获取到的凭证
     private String access_token;
     //凭证有效时间，单位：秒
     private long expires_in;
+
+    public Token() {
+    }
 
     public Token(String access_token, long expires_in) {
         this.access_token = access_token;

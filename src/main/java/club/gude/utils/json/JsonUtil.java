@@ -7,7 +7,6 @@ import com.google.common.base.Strings;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.alibaba.fastjson.JSON.parseObject;
 
 
 /**
@@ -23,12 +22,12 @@ public class JsonUtil {
      * @return
      */
     public static <T> T strToObj(String res, String para, Class<T> clz) {
-        JSONObject jsonObject = parseObject(res);
+        JSONObject jsonObject = JSON.parseObject(res);
         String json = jsonObject.getString(para);
         if(Strings.isNullOrEmpty(json)){
-            return parseObject(res,clz);
+            return JSON.parseObject(res,clz);
         }
-        return parseObject(json, clz);
+        return JSON.parseObject(json, clz);
     }
 
     /**
@@ -40,7 +39,7 @@ public class JsonUtil {
      * @return
      */
     public static <T> List<T> strToListObj(String res, String para, Class<T> clz) {
-        JSONObject jsonObject = parseObject(res);
+        JSONObject jsonObject = JSON.parseObject(res);
         String json = jsonObject.getString(para);
         if(Strings.isNullOrEmpty(json)){
             T t= JSON.parseObject(res,clz);
