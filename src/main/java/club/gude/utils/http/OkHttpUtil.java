@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static javafx.scene.input.KeyCode.R;
+
 /**
  * @Author Gude
  * @Date 2016/4/7.
@@ -43,10 +45,11 @@ public class OkHttpUtil {
         return null;
     }
 
-    public static <T> T syncGet(String url,Class<T> clz) throws IOException {
-        ResponseBody body= syncGet(url);
-        return JSON.parseObject(body.string(),clz);
+    public static <T> T syncGet(String url, Class<T> clz) throws IOException {
+        ResponseBody body = syncGet(url);
+        return JSON.parseObject(body.string(), clz);
     }
+
     /**
      * 同步get
      */
@@ -145,6 +148,17 @@ public class OkHttpUtil {
             return null;
         }
         return null;
+    }
+
+    public static <T> T syncPostByJson(String url, String json, Class<T> clz) throws IOException {
+        ResponseBody body = syncPostByJson(url, json);
+        return JSON.parseObject(body.string(), clz);
+    }
+
+    public static <T> T syncPostByJson(String url, Object param, Class<T> clz) throws IOException {
+        String json = JSON.toJSONString(param);
+        ResponseBody body = syncPostByJson(url, json);
+        return JSON.parseObject(body.string(), clz);
     }
 
     public static ResponseBody syncPostByString(String url, String str) {

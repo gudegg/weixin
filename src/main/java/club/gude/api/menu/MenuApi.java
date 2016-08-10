@@ -1,6 +1,12 @@
 package club.gude.api.menu;
 
+import club.gude.entity.BaseRes;
+import club.gude.entity.menu.Menu;
+import club.gude.entity.menu.MenuResult;
+import club.gude.entity.menu.condition.ConditionMenu;
+import club.gude.entity.menu.condition.ConditionMenuResult;
 import club.gude.utils.http.OkHttpUtil;
+import com.alibaba.fastjson.JSON;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
@@ -26,6 +32,21 @@ public class MenuApi {
     }
 
     /**
+     * 自定义菜单创建接口
+     *
+     * @param access_token
+     * @param menu
+     * @return
+     * @throws IOException
+     */
+    public static BaseRes createMenu(String access_token, Menu menu) throws IOException {
+        StringBuilder sb = new StringBuilder("https://api.weixin.qq.com/cgi-bin/menu/create?access_token=");
+        sb.append(access_token);
+        String param = JSON.toJSONString(menu);
+        return OkHttpUtil.syncPostByJson(sb.toString(), param, BaseRes.class);
+    }
+
+    /**
      * 自定义菜单查询接口
      *
      * @param access_token
@@ -38,6 +59,19 @@ public class MenuApi {
         return responseBody.string();
 
     }
+
+    /**
+     * 自定义菜单查询接口
+     *
+     * @param access_token
+     * @return
+     * @throws IOException
+     */
+    public static MenuResult getMenuRes(String access_token) throws IOException {
+        String result = getMenu(access_token);
+        return JSON.parseObject(result, MenuResult.class);
+    }
+
 
     /**
      * 自定义菜单删除接口
@@ -53,6 +87,18 @@ public class MenuApi {
     }
 
     /**
+     * 自定义菜单删除接口
+     *
+     * @param acccess_token
+     * @return
+     * @throws IOException
+     */
+    public static BaseRes delMenuRes(String acccess_token) throws IOException {
+        String result = delMenu(acccess_token);
+        return JSON.parseObject(result, BaseRes.class);
+    }
+
+    /**
      * 创建个性化菜单
      *
      * @param access_token
@@ -65,6 +111,20 @@ public class MenuApi {
         ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
         return responseBody.string();
 
+    }
+
+    /**
+     * 创建个性化菜单
+     *
+     * @param access_token
+     * @param conditionMenu
+     * @return
+     * @throws IOException
+     */
+    public static ConditionMenuResult addConditionalMenuRes(String access_token, ConditionMenu conditionMenu) throws IOException {
+        String param = JSON.toJSONString(conditionMenu);
+        String result = addConditionalMenu(access_token, param);
+        return JSON.parseObject(result, ConditionMenuResult.class);
     }
 
     /**
@@ -84,15 +144,30 @@ public class MenuApi {
     }
 
     /**
-     * 测试个性化菜单匹配结果
+     * 删除个性化菜单
      *
      * @param access_token
-     * @param json
+     * @param conditionMenuResult
      * @return
      * @throws IOException
      */
-    public static String tryMatchMenu(String access_token, String json) throws IOException {
+    public static BaseRes delConditionalMenuRes(String access_token, ConditionMenuResult conditionMenuResult) throws IOException {
+        StringBuilder sb = new StringBuilder("https://api.weixin.qq.com/cgi-bin/menu/delconditional?access_token=");
+        sb.append(access_token);
+        return OkHttpUtil.syncPostByJson(sb.toString(), conditionMenuResult, BaseRes.class);
+    }
+
+    /**
+     * 测试个性化菜单匹配结果
+     *
+     * @param access_token
+     * @param user_id 可以是粉丝的OpenID，也可以是粉丝的微信号。
+     * @return
+     * @throws IOException
+     */
+    public static String tryMatchMenu(String access_token, String user_id) throws IOException {
         String url = "https://api.weixin.qq.com/cgi-bin/menu/trymatch?access_token=" + access_token;
+        String json="{\"user_id\":\""+user_id+"\"}";
         ResponseBody responseBody = OkHttpUtil.syncPostByJson(url, json);
 
         return responseBody.string();

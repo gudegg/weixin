@@ -22,6 +22,9 @@ public class Menu {
     }
 
     public synchronized Menu add(Button btn) {
+        if (button.size() >= 3) {
+            throw new RuntimeException("自定义菜单最多包括3个一级菜单");
+        }
         button.add(btn);
         return this;
     }

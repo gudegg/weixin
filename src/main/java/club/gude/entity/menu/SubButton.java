@@ -113,6 +113,9 @@ public class SubButton {
     }
 
     public synchronized SubButton add(SubButton btn) {
+        if (sub_button.size() >= 5) {
+            throw new RuntimeException("每个一级菜单最多包含5个二级菜单");
+        }
         sub_button.add(btn);
         return this;
     }
