@@ -9,11 +9,26 @@ import java.util.Properties;
  * @Date 2016/4/5.
  */
 public class WechatConfig {
+    /**
+     * Token(令牌)
+     */
     public final static String Token;
+    /**
+     * AppID(应用ID)
+     */
     public final static String Appid;
+    /**
+     * AppSecret(应用密钥)
+     */
     public final static String AppSecret;
+    /**
+     * EncodingAESKey(消息加解密密钥)
+     */
     public final static String EncodingAESKey;
-    public final static boolean EncryptMessage;
+    /**
+     * 消息加解密方式,默认使用加密
+     */
+    public final static boolean IsEncryptMessage;
 
     static {
         Properties properties=new Properties();
@@ -27,7 +42,7 @@ public class WechatConfig {
         Appid=properties.getProperty("wechat.Appid");
         AppSecret=properties.getProperty("wechat.AppSecret");
         EncodingAESKey=properties.getProperty("wechat.EncodingAESKey");
-        EncryptMessage= Boolean.parseBoolean(properties.getProperty("wechat.EncryptMessage"));
+        IsEncryptMessage= Boolean.parseBoolean(properties.getProperty("wechat.EncryptMessage","true"));
     }
 
 }

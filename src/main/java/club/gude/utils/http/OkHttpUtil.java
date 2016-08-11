@@ -40,14 +40,19 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
 
-    public static <T> T syncGet(String url, Class<T> clz) throws IOException {
+    public static <T> T syncGet(String url, Class<T> clz) {
         ResponseBody body = syncGet(url);
-        return JSON.parseObject(body.string(), clz);
+        try {
+            String result = body.string();
+            return JSON.parseObject(result, clz);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -63,7 +68,6 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
@@ -84,7 +88,6 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
@@ -102,10 +105,11 @@ public class OkHttpUtil {
     }
 
     public static void asynGet(String url, Map<String, String> param, Callback callback) {
+        StringBuilder sb = new StringBuilder(url);
         for (String s : param.keySet()) {
-            url += "?" + s + "=" + param.get(s);
+            sb.append("?").append(s).append("=").append(param.get(s));
         }
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder().url(sb.toString()).build();
         OK_HTTP_CLIENT.newCall(request).enqueue(callback);
     }
 
@@ -129,7 +133,6 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
@@ -145,20 +148,32 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
 
-    public static <T> T syncPostByJson(String url, String json, Class<T> clz) throws IOException {
+    public static <T> T syncPostByJson(String url, String json, Class<T> clz) {
         ResponseBody body = syncPostByJson(url, json);
-        return JSON.parseObject(body.string(), clz);
+
+        try {
+            String result = body.string();
+            return JSON.parseObject(result, clz);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static <T> T syncPostByJson(String url, Object param, Class<T> clz) throws IOException {
+    public static <T> T syncPostByJson(String url, Object param, Class<T> clz) {
         String json = JSON.toJSONString(param);
         ResponseBody body = syncPostByJson(url, json);
-        return JSON.parseObject(body.string(), clz);
+        try {
+            String result = body.string();
+            return JSON.parseObject(result, clz);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static ResponseBody syncPostByString(String url, String str) {
@@ -172,7 +187,6 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
@@ -188,7 +202,6 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
@@ -204,7 +217,6 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }
@@ -237,7 +249,6 @@ public class OkHttpUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
         return null;
     }

@@ -2,6 +2,7 @@ package club.gude.utils.xml;
 
 import club.gude.entity.msg.in.*;
 import club.gude.entity.msg.out.OutBaseMsg;
+import club.gude.utils.msg.MsgType;
 import com.google.common.base.Strings;
 import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
@@ -21,7 +22,7 @@ import java.io.Writer;
  */
 public class XmlJaxbUtil {
     /**
-     * jaxb xml转为对象
+     *  xml转为对象
      *
      * @param strXml xml
      * @return 对象
@@ -32,30 +33,30 @@ public class XmlJaxbUtil {
             return null;
         } else {
             String msgType = XmlUtil.inMsgType(strXml);
-            if (msgType.equalsIgnoreCase("text")) {
+            if (msgType.equalsIgnoreCase(MsgType.TEXT)) {
                 InTextMsg inTextMsg = StrToObj(InTextMsg.class, strXml);
                 return inTextMsg;
-            } else if (msgType.equalsIgnoreCase("image")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.IMAGE)) {
                 InImageMsg inImageMsg = StrToObj(InImageMsg.class, strXml);
 
                 return inImageMsg;
 
-            } else if (msgType.equalsIgnoreCase("voice")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.VOICE)) {
                 InVoiceMsg inVoiceMsg = StrToObj(InVoiceMsg.class, strXml);
 
                 return inVoiceMsg;
 
-            } else if (msgType.equalsIgnoreCase("video") || msgType.equalsIgnoreCase("shortvideo")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.VIDEO) || msgType.equalsIgnoreCase(MsgType.SHORT_VIDEO)) {
                 InVedioMsg inVedioMsg = StrToObj(InVedioMsg.class, strXml);
 
                 return inVedioMsg;
 
-            } else if (msgType.equalsIgnoreCase("location")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.LOCATION)) {
                 InLocationMsg inLocationMsg = StrToObj(InLocationMsg.class, strXml);
 
                 return inLocationMsg;
 
-            } else if (msgType.equalsIgnoreCase("link")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.LINK)) {
                 InLinkMsg inLinkMsg = StrToObj(InLinkMsg.class, strXml);
 
                 return inLinkMsg;
@@ -65,7 +66,7 @@ public class XmlJaxbUtil {
     }
 
     /**
-     * jaxb xml转为对象
+     * xml转为对象
      * @param strXml
      * @param clz
      * @param <T>

@@ -53,12 +53,12 @@ public class XmlUtil {
     }
 
     /**
-     * @param strXml
+     * @param strXml 接收到用户的消息
      * @return 消息类型 text image vedio 等等
      */
     public static String inMsgType(String strXml) {
         if (Strings.isNullOrEmpty(strXml)) {
-            return null;
+            throw new RuntimeException("strXml不能为空");
         } else {
 
             try {

@@ -9,6 +9,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -21,27 +23,11 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-
-//
-//            final TokenApi tokenApi=TokenApi.getInstance();
-//            ScheduledExecutorService service= Executors.newSingleThreadScheduledExecutor();
-//            service.scheduleWithFixedDelay(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        System.out.println(tokenApi.getToken().getAccess_token());
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            },0,1, TimeUnit.SECONDS);
-//            tokenApi.setExpired_time(5);
         TokenApi tokenApi=TokenApi.getInstance();
         try {
-            logger.info(tokenApi.getToken().getAccess_token());
+            logger.info("监听器:"+tokenApi.getToken().getAccess_token());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

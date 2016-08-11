@@ -1,4 +1,4 @@
-package club.gude.utils;
+package club.gude.utils.msg;
 
 import java.security.MessageDigest;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package club.gude.utils;
+package club.gude.utils.msg;
 
 /**
  * @Author Gude

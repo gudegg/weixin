@@ -2,14 +2,19 @@ package club.gude.controller;
 
 import club.gude.api.authorize.AuthorizeApi;
 import club.gude.config.WechatConfig;
+import club.gude.entity.msg.ReceiveParam;
 import club.gude.entity.msg.in.*;
 import club.gude.entity.msg.out.OutTextMsg;
-import club.gude.utils.SignUtil;
+import club.gude.utils.msg.MsgUtil;
+import club.gude.utils.msg.SignUtil;
 import club.gude.utils.xml.XmlJaxbUtil;
 import club.gude.utils.xml.XmlUtil;
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
+import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +26,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+
+import static club.gude.utils.msg.MsgUtil.getReceiveParam;
+import static javafx.scene.input.KeyCode.L;
 
 
 /**
@@ -36,6 +46,14 @@ public class AccessController {
 
     private WXBizMsgCrypt wxBizMsgCrypt;
 
+    {
+        try {
+            wxBizMsgCrypt = new WXBizMsgCrypt(WechatConfig.Token, WechatConfig.EncodingAESKey, WechatConfig.Appid);
+        } catch (AesException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 接入微信
@@ -47,12 +65,11 @@ public class AccessController {
      * @return
      */
     @RequestMapping(value = "/access", method = RequestMethod.GET)
-    public String accessWechat(String signature, String timestamp, String nonce, String echostr) {
-        logger.info(WechatConfig.Token);
-        String sha1_signature = SignUtil.getSHA1(WechatConfig.Token, timestamp, nonce);
-        logger.info(sha1_signature + "  " + signature);
-        if (sha1_signature.equals(signature)) {
-            return echostr;
+    public String accessWechat(HttpServletRequest request) {
+      ReceiveParam param=MsgUtil.getReceiveParam(request);
+        String sha1_signature = SignUtil.getSHA1(WechatConfig.Token, param.getTimestamp(), param.getNonce());
+        if (sha1_signature.equals(param.getSignature())) {
+            return param.getEchostr();
         }
         return sha1_signature;
     }
@@ -65,23 +82,19 @@ public class AccessController {
      */
     @RequestMapping(value = "/access", method = RequestMethod.POST)
     public Object sendMsg(HttpServletRequest request, String signature, String timestamp, String nonce) {
+        ReceiveParam receiveParam = MsgUtil.getReceiveParam(request);
+        logger.info(JSON.toJSONString(receiveParam));
+
         String sha1_signature = SignUtil.getSHA1(WechatConfig.Token, timestamp, nonce);
         if (sha1_signature.equals(signature)) {
             try {
-                InputStream is = request.getInputStream();
-                String receive_msg = CharStreams.toString(new InputStreamReader(is, Charsets.UTF_8));
+                String receive_msg = MsgUtil.getReceiveMsg(request);
 
                 logger.info("\n接收消息:" + receive_msg);
                 Map<String, String> receive_map = null;
                 //判断使用明文模式 还是加密模式
-                if (WechatConfig.EncryptMessage) {
-                    if (wxBizMsgCrypt == null) {
-                        wxBizMsgCrypt = new WXBizMsgCrypt(WechatConfig.Token, WechatConfig.EncodingAESKey, WechatConfig.Appid);
-                    }
-                    String encrypt_type = request.getParameter("encrypt_type");
-                    String msg_signature = request.getParameter("msg_signature");
-                    //加密消息解密
-                    String decrypt_Msg = wxBizMsgCrypt.decryptMsg(msg_signature, timestamp, nonce, receive_msg);
+                if (WechatConfig.IsEncryptMessage) {
+                    String decrypt_Msg = receive_msg;
                     receive_map = XmlUtil.xmlResolve(decrypt_Msg);
 
 
@@ -108,6 +121,7 @@ public class AccessController {
 
 
                         String replyMsg = XmlJaxbUtil.xmlCreate_MsgOut(outTextMsg);
+                        replyMsg = wxBizMsgCrypt.encryptMsg(replyMsg, timestamp, nonce);
                         return replyMsg;
 
                     } else if (XmlUtil.inMsgType(decrypt_Msg).equals("location")) {
@@ -173,7 +187,7 @@ public class AccessController {
 
     @RequestMapping("/auth")
     public void authorize(String code) throws IOException {
-       String res= AuthorizeApi.codeExchangeToken(code,WechatConfig.Appid,WechatConfig.AppSecret);
+        String res = AuthorizeApi.codeExchangeToken(code, WechatConfig.Appid, WechatConfig.AppSecret);
         System.out.println(res);
     }
 }
