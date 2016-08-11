@@ -10,29 +10,18 @@ import club.gude.utils.msg.SignUtil;
 import club.gude.utils.xml.XmlJaxbUtil;
 import club.gude.utils.xml.XmlUtil;
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
 import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
-import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import static club.gude.utils.msg.MsgUtil.getReceiveParam;
-import static javafx.scene.input.KeyCode.L;
 
 
 /**
@@ -58,10 +47,6 @@ public class AccessController {
     /**
      * 接入微信
      *
-     * @param signature
-     * @param timestamp
-     * @param nonce
-     * @param echostr
      * @return
      */
     @RequestMapping(value = "/access", method = RequestMethod.GET)

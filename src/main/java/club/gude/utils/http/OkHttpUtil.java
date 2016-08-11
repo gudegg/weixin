@@ -10,8 +10,6 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static javafx.scene.input.KeyCode.R;
-
 /**
  * @Author Gude
  * @Date 2016/4/7.
