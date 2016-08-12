@@ -1,6 +1,7 @@
 package club.gude.utils.xml;
 
 import club.gude.entity.msg.in.*;
+import club.gude.utils.msg.MsgType;
 import com.google.common.base.Strings;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -57,13 +58,35 @@ public class XmlUtil {
      * @return 消息类型 text image vedio 等等
      */
     public static String inMsgType(String strXml) {
-        if (Strings.isNullOrEmpty(strXml)) {
-            throw new RuntimeException("strXml不能为空");
+        return getNode(strXml, "MsgType");
+    }
+
+    /**
+     * {@code
+     * <xml>
+     * <ToUserName><![CDATA[toUser]]></ToUserName>
+     * <FromUserName><![CDATA[FromUser]]></FromUserName>
+     * <CreateTime>123456789</CreateTime>
+     * <MsgType><![CDATA[event]]></MsgType>
+     * <Event><![CDATA[subscribe]]></Event>
+     * </xml>
+     * node传入Event得到subscribe
+     *}
+     * <p>
+     * 查找节点内容
+     * </p>
+     * @param str  xml数据
+     * @param node 选择查找的节点
+     * @return
+     */
+    public static String getNode(String str, String node) {
+        if (Strings.isNullOrEmpty(str)) {
+            throw new RuntimeException("str不能为空");
         } else {
 
             try {
-                Document document = DocumentHelper.parseText(strXml);
-                Element MsgType_element = (Element) document.selectSingleNode("//MsgType");
+                Document document = DocumentHelper.parseText(str);
+                Element MsgType_element = (Element) document.selectSingleNode("//" + node);
                 String msgType = MsgType_element.getText();
                 return msgType;
             } catch (DocumentException e) {
@@ -98,31 +121,31 @@ public class XmlUtil {
             // 遍历根节点下所有子节点
             Iterator<?> iter = root.elementIterator();
 
-            if (msgType.equalsIgnoreCase("text")) {
+            if (msgType.equalsIgnoreCase(MsgType.TEXT)) {
                 InTextMsg inTextMsg = new InTextMsg();
                 reflectVal(inTextMsg, iter);
                 return inTextMsg;
-            } else if (msgType.equalsIgnoreCase("image")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.IMAGE)) {
                 InImageMsg inImageMsg = new InImageMsg();
                 reflectVal(inImageMsg, iter);
                 return inImageMsg;
 
-            } else if (msgType.equalsIgnoreCase("voice")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.VOICE)) {
                 InVoiceMsg inVoiceMsg = new InVoiceMsg();
                 reflectVal(inVoiceMsg, iter);
                 return inVoiceMsg;
 
-            } else if (msgType.equalsIgnoreCase("video") || msgType.equalsIgnoreCase("shortvideo")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.VIDEO) || msgType.equalsIgnoreCase(MsgType.SHORT_VIDEO)) {
                 InVedioMsg inVedioMsg = new InVedioMsg();
                 reflectVal(inVedioMsg, iter);
                 return inVedioMsg;
 
-            } else if (msgType.equalsIgnoreCase("location")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.LOCATION)) {
                 InLocationMsg inLocationMsg = new InLocationMsg();
                 reflectVal(inLocationMsg, iter);
                 return inLocationMsg;
 
-            } else if (msgType.equalsIgnoreCase("link")) {
+            } else if (msgType.equalsIgnoreCase(MsgType.LINK)) {
                 InLinkMsg inLinkMsg = new InLinkMsg();
                 reflectVal(inLinkMsg, iter);
                 return inLinkMsg;

@@ -68,7 +68,6 @@ public class AccessController {
     @RequestMapping(value = "/access", method = RequestMethod.POST)
     public Object sendMsg(HttpServletRequest request, String signature, String timestamp, String nonce) {
         ReceiveParam receiveParam = MsgUtil.getReceiveParam(request);
-        logger.info(JSON.toJSONString(receiveParam));
 
         String sha1_signature = SignUtil.getSHA1(WechatConfig.Token, timestamp, nonce);
         if (sha1_signature.equals(signature)) {

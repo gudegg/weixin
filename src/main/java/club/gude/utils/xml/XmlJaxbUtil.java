@@ -22,7 +22,7 @@ import java.io.Writer;
  */
 public class XmlJaxbUtil {
     /**
-     *  xml转为对象
+     * xml转为对象
      *
      * @param strXml xml
      * @return 对象
@@ -67,45 +67,18 @@ public class XmlJaxbUtil {
 
     /**
      * xml转为对象
+     *
      * @param strXml
      * @param clz
      * @param <T>
      * @return
      * @throws JAXBException
      */
-    public static <T> T xmlResolve_MsgIn(String strXml, Class<T> clz) throws JAXBException {
+    public static <T> T xmlResolve_MsgIn(String strXml, Class<T> clz) throws Exception {
         if (Strings.isNullOrEmpty(strXml)) {
             return null;
         } else {
-            if (clz.equals(InTextMsg.class)) {
-                InTextMsg inTextMsg = StrToObj(InTextMsg.class, strXml);
-                return (T) inTextMsg;
-            } else if (clz.equals(InImageMsg.class)) {
-                InImageMsg inImageMsg = StrToObj(InImageMsg.class, strXml);
-
-                return (T) inImageMsg;
-
-            } else if (clz.equals(InVoiceMsg.class)) {
-                InVoiceMsg inVoiceMsg = StrToObj(InVoiceMsg.class, strXml);
-
-                return (T) inVoiceMsg;
-
-            } else if (clz.equals(InVedioMsg.class)) {
-                InVedioMsg inVedioMsg = StrToObj(InVedioMsg.class, strXml);
-
-                return (T) inVedioMsg;
-
-            } else if (clz.equals(InLocationMsg.class)) {
-                InLocationMsg inLocationMsg = StrToObj(InLocationMsg.class, strXml);
-
-                return (T) inLocationMsg;
-
-            } else if (clz.equals(InLinkMsg.class)) {
-                InLinkMsg inLinkMsg = StrToObj(InLinkMsg.class, strXml);
-
-                return (T) inLinkMsg;
-            }
-            return null;
+           return StrToObj(clz,strXml);
         }
     }
 
@@ -123,7 +96,7 @@ public class XmlJaxbUtil {
      * @throws JAXBException
      */
 
-    public static <T  extends  OutBaseMsg> String xmlCreate_MsgOut(T  outBaseMsg) throws JAXBException {
+    public static <T extends OutBaseMsg> String xmlCreate_MsgOut(T outBaseMsg) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(outBaseMsg.getClass(), OutBaseMsg.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         //是否输出头 True不输出 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

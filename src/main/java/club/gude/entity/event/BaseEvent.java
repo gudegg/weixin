@@ -1,35 +1,32 @@
 package club.gude.entity.event;
 
-import club.gude.utils.xml.AdapterStringCDATA;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.annotation.XmlElement;
+import java.io.Serializable;
 
 /**
- * @Author Gude
- * @Date 2016/4/16.
+ * @Author Gude.
+ * @Date 2016/8/12.
  */
-@XmlRootElement(name = "xml")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class BaseEvent {
-    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
+@XmlAccessorType(XmlAccessType.NONE)
+public class BaseEvent implements Serializable {
+    private static final long serialVersionUID = -7595364937709524186L;
+    //开发者微信(接收)
+    @XmlElement
     private String ToUserName;
-    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
+    //发送方帐号（一个OpenID）
+    @XmlElement
     private String FromUserName;
+    //消息创建时间
+    @XmlElement
     private Integer CreateTime;
-    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
+    //消息类型
+    @XmlElement
     private String MsgType;
-    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
+    //事件类型，subscribe(订阅)、unsubscribe(取消订阅)
+    @XmlElement
     private String Event;
-    private Double Latitude;
-    private Double Longitude;
-    private Double Precision;
-    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
-    private String EventKey;
-    @XmlJavaTypeAdapter(AdapterStringCDATA.class)
-    private String Ticket;
 
     public String getToUserName() {
         return ToUserName;
@@ -69,45 +66,5 @@ public class BaseEvent {
 
     public void setEvent(String event) {
         Event = event;
-    }
-
-    public String getTicket() {
-        return Ticket;
-    }
-
-    public void setTicket(String ticket) {
-        Ticket = ticket;
-    }
-
-    public Double getLatitude() {
-        return Latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        Latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return Longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        Longitude = longitude;
-    }
-
-    public Double getPrecision() {
-        return Precision;
-    }
-
-    public void setPrecision(Double precision) {
-        Precision = precision;
-    }
-
-    public String getEventKey() {
-        return EventKey;
-    }
-
-    public void setEventKey(String eventKey) {
-        EventKey = eventKey;
     }
 }
