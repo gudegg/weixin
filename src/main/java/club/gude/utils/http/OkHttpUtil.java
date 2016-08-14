@@ -219,6 +219,18 @@ public class OkHttpUtil {
         return null;
     }
 
+    public static <T> T syncPostByFile(String url, File file, Class<T> clz) {
+        ResponseBody body = syncPostByFile(url, file);
+        try {
+            String result = body.string();
+            return JSON.parseObject(result, clz);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
     /**
      * example:
      * <p>

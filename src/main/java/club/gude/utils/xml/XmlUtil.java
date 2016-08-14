@@ -87,6 +87,9 @@ public class XmlUtil {
             try {
                 Document document = DocumentHelper.parseText(str);
                 Element MsgType_element = (Element) document.selectSingleNode("//" + node);
+                if(MsgType_element==null){
+                    return null;
+                }
                 String msgType = MsgType_element.getText();
                 return msgType;
             } catch (DocumentException e) {
