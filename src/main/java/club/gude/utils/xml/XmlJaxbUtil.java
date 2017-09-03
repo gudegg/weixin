@@ -82,6 +82,14 @@ public class XmlJaxbUtil {
         }
     }
 
+    /**
+     * xml字符串转化为对象
+     * @param clz
+     * @param strXml
+     * @param <T>
+     * @return
+     * @throws JAXBException
+     */
     public static <T> T StrToObj(Class<T> clz, String strXml) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(clz);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

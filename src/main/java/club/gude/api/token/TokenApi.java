@@ -3,8 +3,6 @@ package club.gude.api.token;
 import club.gude.entity.token.Token;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Author Gude
@@ -24,7 +22,7 @@ public class TokenApi {
 
     }
 
-    public Token getToken() throws IOException {
+    public synchronized Token getToken() throws IOException {
         if (token == null) {
             setToken(TokenTask.freshToken());
             TokenTask.createTask(expired_time);
